@@ -1,0 +1,25 @@
+/* Фильтр */
+form#adverts_search input[type="radio"]{
+	display:inline;
+	width:0; 
+	height:0;
+}
+form#adverts_search > table > tbody > tr > td > span{
+    padding:3px 8px 5px 0;
+}
+/* Блок в условных комментариях, указывающий пользователю о том, что его броузер устарел */
+#old_ie {
+	background-color:red;
+	font-weight:bold;
+	text-align:center;
+	padding:5px;
+	border:1px solid #000;
+	color:#000000;
+}
+#old_ie a {
+	color:#fff;
+	text-decoration:underline;
+}
+#old_ie a:hover {
+    text-decoration:none;
+}

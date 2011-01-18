@@ -1,0 +1,88 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru" dir="ltr">
+<head>
+<?=$this->getHelper('Html_Title')->getHtml()?>
+<meta http-equiv="Content-language" content="ru" />
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1251" />
+<link rel="stylesheet" href="/http/css/backend/main.css" type="text/css" />
+<script type="text/javascript" src="/http/js/library/index.js"></script>
+</head><body>
+
+<? include $this->getRealTemplatePath('Common/BackendNotification') ?>
+
+<? include $this->getRealTemplatePath('Common/BackendMenu') ?>
+
+<table class="aTable">
+<tr><td><a href="/admin/module/"><?=$this->getHelper('Html_Title')->getByIndex(1)?></a> &raquo;
+
+<? if($this->module->getId()): ?>
+    <?=$this->lang->editing_module?> &laquo;<?=$this->getHelper('Helper_Format')->run($this->module->getName())?>&raquo;
+<? else: ?>
+    <?=$this->lang->add_module?>
+<? endif; ?>
+</td></tr>
+<?php if($this->module->getId()): ?>
+<tr><td><a class="add_element" href="/admin/controller/edit/0/<?=$this->module->getId()?>"><?=$this->lang->add_controller?></a> <span class="vhr">|</span></td></tr>
+<?php endif; ?>
+</table>
+
+<form id="<?=$this->_module_name?>_<?=$this->_controller_name?>" method="post" action="<?=$this->hsc_request_uri?>">
+<table class="aTable">
+    <colgroup>
+        <col width="30%" />
+        <col width="70%" />
+    </colgroup>
+    <tr>
+        <th colspan="2"><h4>
+            <? if($this->module->getId()): ?>
+                <?=$this->lang->editing_module?> &laquo;<?=$this->getHelper('Helper_Format')->run($this->module->getName())?>&raquo;
+            <? else: ?>
+                <?=$this->lang->add_module?>
+            <? endif; ?></h4>
+        </th>
+    </tr>
+    <tr>
+        <td><strong class="compulsory">Имя модуля:</strong></td>
+        <td>
+            <?=$this->getHelper('Helper_Form')->inputText('module[name]', $this->module->getName(), array('maxlength'=>50, 'class'=>'textSmall'))->getHtml()?>
+            <?=$this->getHelper('Helper_Form')->getFieldError($this->err->name)?>
+        </td>
+    </tr>
+    <tr>
+        <td><strong class="compulsory">Ключ модуля:</strong></td>
+        <td>
+            <?=$this->getHelper('Helper_Form')->inputText('module[key]', $this->module->getKey(), array('maxlength'=>30, 'class'=>'textSmall'))->getHtml()?>
+            <?=$this->getHelper('Helper_Form')->getFieldError($this->err->key)?>
+        </td>
+    </tr>
+    <tr>
+        <td>Контроллеры:</td>
+        <td>
+            <? if ($this->module->getControllers()->count()): ?>
+            <table class="intoTable">
+            <tr><th colspan="3">Контоллеры</th></tr>
+                <? foreach ($this->module->getControllers() as $controller): ?>
+                <tr>
+                    <td><?=$this->getHelper('Helper_Format')->hsc($controller->getName())?></td><td><a href="/admin/controller/edit/<?=$controller->getId()?>/<?=$controller->getIdModule()?>/"><img src="<?=$this->path->image->system->icon?>edit.png" alt="" /></a></td>
+                    <td><a onclick="return confirm('<?=sprintf(
+                                                      $this->lang->question_delete_controller,
+                                                      $this->getHelper('Helper_Format')->confirm($controller->getName()),
+                                                      $controller->getId())?>')" href="/admin/controller/delete/<?=$controller->getId()?>/<?=$controller->getIdModule()?>/"><img src="<?=$this->path->image->system->icon?>delete.png" alt="" /></a></td>
+                </tr>
+                <? endforeach; ?>
+            </table>
+            <? else: ?>
+                <p>Контроллеров нет</p>
+            <? endif; ?>
+        </td>
+    </tr>
+    <tr align="center">
+        <td colspan="2">
+		<?=$this->getHelper('Helper_Form')->inputHidden('module[id]', $this->module->getId())->getHtml()?>
+		<?=$this->getHelper('Helper_Form')->inputSubmit('submit', $this->lang->save_changes)->getHtml()?>&nbsp;&nbsp;&nbsp;
+        <?=$this->getHelper('Helper_Form')->inputFullCheckbox('return_on_page', 1, 0, $this->return_on_page, array('id'=>'label_return_on_page'))?>
+        &nbsp;<?=$this->getHelper('Helper_Form')->Label($this->lang->return_to_this_page, 'label_return_on_page')->getHtml()?>
+        </td>
+    </tr>
+</table></form>
+</body></html>

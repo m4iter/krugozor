@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru" dir="ltr">
+<head>
+<?=$this->getHelper('Html_Title')->getHtml()?>
+<meta http-equiv="Content-language" content="ru" />
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1251" />
+<link rel="stylesheet" href="/http/css/backend/main.css" type="text/css" />
+
+</head><body>
+
+<? include $this->getRealTemplatePath('Common/BackendNotification') ?>
+
+<? include $this->getRealTemplatePath('Common/BackendMenu') ?>
+
+<table class="aTable">
+<tr><td><a class="add_element" href="/admin/group/edit/"><?=$this->lang['adding_group']?></a> <span class="vhr">|</span></td></tr>
+</table>
+
+<table class="aTable">
+<? if ($this->groups): ?>
+    <colgroup>
+        <col width="5%" />
+        <col width="55%" />
+        <col width="20%" />
+        <col width="10%" />
+        <col width="10%" />
+    </colgroup>
+    <tr>
+      <th colspan="6"><h4><?=$this->lang['list_of_groups']?></h4></th>
+    </tr>
+    <tr class="head_params">
+    <td>
+    <?php
+        $linker = $this->getHelper('Helper_SortLink')
+                       ->setFieldName('id')
+                       ->setAnchor($this->lang['id'])
+                       ->setUrl('/admin/group/')
+                       ->setIconSrc($this->path['image']['system']['icon'])
+                       ->setCurrentFieldName($this->field_name)
+                       ->setCurrentSortOrder($this->sort_order)
+                       ->setQueryStringFromArray(array(
+                           'sep' => $this->navigation->getCurrentSeparator(),
+                           'page' => $this->navigation->getCurrentPage(),
+                         ));
+
+        echo $linker->getHtml();
+    ?>
+    </td>
+    <td>
+    <?php
+        echo $linker->setFieldName('name')
+                    ->setAnchor($this->lang['group_name'])
+                    ->getHtml(); ?>
+    </td>
+    <td>
+    <?php
+        echo $linker->setFieldName('active')
+                    ->setAnchor($this->lang['group_active'])
+                    ->getHtml(); ?>
+    </td>
+        <td colspan="2"><?=$this->lang['actions']?></td>
+    </tr>
+
+    <? foreach ($this->groups as $group):?>
+    <tr class="center color_hover">
+        <td><?=$group->getId()?></td>
+        <td><?=$this->getHelper('Helper_Format')->run($group->getName(), 'entDec', 'hsc')?></td>
+        <td><? if ($group->getActive()):?>
+                <?=$this->lang['yes']?>
+            <? else: ?>
+                <span class="lighttext"><?=$this->lang['no']?></span>
+            <? endif; ?>
+        </td>
+        <td class="td_actions"><a href="/admin/group/edit/?id=<?=$group->getId()?>"><img src="<?=$this->path->image->system->icon?>edit.png" alt="" /></a></td>
+        <td class="td_actions">
+            <? if ($group->getAlias() != 'administrator' &&
+                  $group->getAlias() != 'user' &&
+                  $group->getAlias() != 'guest'): ?>
+            <a onclick="return confirm('<?=sprintf($this->lang['question_delete_group'], $this->getHelper('Helper_Format')->run($group->getName(), 'entDec', 'confirm'))?>')" href="/admin/group/delete/?id=<?=$group->getId()?>&amp;referer=<?=$this->urlencode_full_request_uri?>"><img src="<?=$this->path->image->system->icon?>delete.png" alt="" /></a>
+            <? else: ?>
+                <img src="<?=$this->path['image']['system']['icon']?>delete_empty.png" alt="" />
+            <? endif; ?>
+        </td>
+    </tr>
+    <? endforeach; ?>
+
+<? else: ?>
+    <tr>
+      <th><h4><?=$this->lang['list_of_groups']?></h4></th>
+    </tr>
+    <tr class="center"><td><?=$this->lang['empty_list_of_groups']?></td></tr>
+<? endif; ?>
+</table>
+
+<?
+    $navigation_params = array
+    (
+        'css.normalLinkClass' => 'navigation_normal_link', // CSS-класс гиперссылки.
+        'css.activeLinkClass' => '', // CSS-класс открытой в данный момент гиперссылки.
+        'GET' => array
+        (
+            'field_name' => $this->field_name,
+            'sort_order' => $this->sort_order,
+        ),
+    );
+?>
+
+<? include $this->getRealTemplatePath('Common/BackendNavigation') ?>
+
+</body></html>

@@ -1,0 +1,6 @@
+<? if($this->notification && !$this->notification->hidden): ?>
+<div class="notification_<?=$this->notification->type?>">
+	<h3><?=$this->notification->header?></h3>
+	<?=$this->notification->message?>
+</div>
+<? endif; ?>

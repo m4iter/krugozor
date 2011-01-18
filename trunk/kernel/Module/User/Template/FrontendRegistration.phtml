@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=windows-1251" />
+<meta name="keywords" content="<?=$this->lang['meta']['keywords']?>" />
+<meta name="description" content="<?=$this->lang['meta']['description']?>" />
+<link rel="stylesheet" href="<?=$this->path['css']?>frontend/main.css" type="text/css" />
+<link rel="shortcut icon" sizes="16x16" href="/favicon.ico" />
+<!--[if IE]>
+    <link rel="stylesheet" type="text/css" href="<?=$this->path['css']?>frontend/all-ie.css" />
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+<script type="text/javascript" src="<?=$this->path->js?>library/index.js"></script>
+<script type="text/javascript" src="<?=$this->path->js?>library/locations.js"></script>
+<script type="text/javascript" src="<?=$this->path->js?>tooltip.js"></script>
+<script type="text/javascript" src="<?=$this->path->js?>jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="<?=$this->path->js?>jquery.corner.js"></script>
+<script type="text/javascript" src="<?=$this->path->js?>modules/Common/scripts.js"></script>
+<?=$this->getHelper('Html_Title')->getHtml()?>
+</head><body>
+
+<? include $this->getRealTemplatePath('Common/FrontendTop') ?>
+
+<div class="content">
+
+<? include $this->getRealTemplatePath('Common/FrontendNotification') ?>
+
+<h2 class="header"><?=$this->getHelper('Html_Title')->getByIndex(1)?></h2>
+
+<form id="<?=$this->_module_name?>_<?=$this->_controller_name?>" method="post" action="<?=$this->hsc_request_uri?>">
+
+<?=$this->getHelper('Helper_Form')->getFieldError($this->err->system_error)?>
+
+<fieldset><legend>Регистрационная информация</legend>
+
+
+<?=$this->getHelper('Helper_Form')->getFieldError($this->err['common_error'])?>
+
+<table class="table_structure">
+    <colgroup>
+        <col width="200" />
+        <col width="600" />
+    </colgroup>
+    <tr>
+        <td colspan="2"><p>Регистрационная информация заполняется только один раз. В последующем Вы сможете подавать объявления на наш сайт без повторного указания этой информации.</p>
+       </td>
+    </tr>
+    <tr>
+        <td><span class="red_star">*</span> <strong class="compulsory">Ваш будущий логин:</strong></td>
+        <td><?=$this->getHelper('Helper_Form')->inputText('user[login]', $this->user->getLogin(), array('maxlength'=>255, 'class'=>'medium'))->getHtml()?> <span title="Придумайте себе логин. Логин не то же, что и имя, а просто уникальный идентификатор, идентифицирующий Вас как участника. Допускается любая комбинация символов латинского алфавита (a—z), цифр (0—9), знака подчёркивания (_) или знака дефис (-)." class="help">?</span>
+           <?=$this->getHelper('Helper_Form')->getFieldError($this->err->login)?></td>
+    </tr>
+
+    <tr>
+        <td><span class="red_star">*</span> <strong class="compulsory">Ваш будущий пароль:</strong></td>
+        <td><?=$this->getHelper('Helper_Form')->inputText('user[password_1]', $this->password_1, array('maxlength'=>255, 'class'=>'medium', 'id' => 'user_password_1'))->getHtml()?> <span title="Придумайте себе  пароль. Допускается любая комбинация символов латинского алфавита (a—z), цифр (0—9), знака подчёркивания (_) или знака дефис (-)." class="help">?</span> <a href="#" onclick="return star2chars('user_password_1', this)">скрыть пароль</a>
+            <?=$this->getHelper('Helper_Form')->getFieldError($this->err->password_1)?>
+        </td>
+    </tr>
+<? if (0): ?>
+    <tr>
+        <td><span class="red_star">*</span> <strong class="compulsory">Повторите пароль:</strong></td>
+        <td><?=$this->getHelper('Helper_Form')->inputText('user[password_2]', $this->password_2, array('maxlength'=>255, 'class'=>'medium', 'id' => 'user_password_2'))->getHtml()?> <span title="В данное поле введите тот же пароль, что Вы ввели в первое поле." class="help">?</span> <a href="#" onclick="return star2chars('user_password_2', this)">скрыть пароль</a>
+             <?=$this->getHelper('Helper_Form')->getFieldError($this->err->password_2)?>
+             <?=$this->getHelper('Helper_Form')->getFieldError($this->err->password)?>
+        </td>
+    </tr>
+<? endif; ?>
+    <tr>
+        <td><span class="red_star">*</span> <strong class="compulsory">Введите цифры<br />с изображения:</strong></td>
+        <td><p><img onclick="this.src=this.src+'&amp;'+Math.round(Math.random())" alt="<?=$this->lang->captcha_help?>" title="Если Вы не видите число на картинке, нажмите на картинку мышкой" src="/captcha/?<?=$this->session_name?>=<?=$this->session_id?>" /></p>
+            <?=$this->getHelper('Helper_Form')->inputText('captcha_code', $this->captcha_code, array('onkeyup' => 'filterFieldDigit(this,"")', 'maxlength' => 4, 'style'=>'width:4em'))->getHtml()?> <span class="help" title="Если Вы не видите число на картинке, нажмите на картинку мышкой">?</span>
+            <?=$this->getHelper('Helper_Form')->getFieldError($this->err->captcha)?>
+        </td>
+    </tr>
+</table>
+</fieldset>
+
+<fieldset><legend>Контактная информация</legend>
+<table class="table_structure">
+    <colgroup>
+        <col width="200" />
+        <col width="600" />
+    </colgroup>
+    <tr><td colspan="2">Поля ниже лучше заполнить сейчас, чтобы в каждом новом создаваемом Вами объявлении Ваши контактные данные подставлялись автоматически.</td></tr>
+    <tr>
+        <td>Ваше имя:</td>
+        <td><?=$this->getHelper('Helper_Form')->inputText('user[first_name]', $this->user->getFirstName(), array('maxlength'=>30, 'class'=>'medium'))->getHtml()?>
+            <?=$this->getHelper('Helper_Form')->getFieldError($this->err->first_name)?></td>
+    </tr>
+    <tr>
+        <td>Ваш телефон:</td>
+        <td><?=$this->getHelper('Helper_Form')->inputText('user[phone]', $this->user->getPhone(), array('maxlength'=>255, 'class'=>'medium'))->getHtml()?>
+            <?=$this->getHelper('Helper_Form')->getFieldError($this->err->phone)?></td>
+    </tr>
+    <tr>
+        <td>Ваш email-адрес:</td>
+        <td><?=$this->getHelper('Helper_Form')->inputText('user[mail]', $this->user->getMail()->getValue(), array('maxlength'=>255, 'class'=>'medium'))->getHtml()?> <span title="Указывайте реальный email-адрес, иначе в случае надобности Вы не сможете восстановить забытый пароль!" class="help">?</span>
+            <?=$this->getHelper('Helper_Form')->getFieldError($this->err->mail)?></td>
+    </tr>
+    <tr>
+        <td>ICQ:</td>
+        <td><?=$this->getHelper('Helper_Form')->inputText('user[icq]', $this->user->getIcq(), array('maxlength'=>10, 'class'=>'medium', 'onkeyup' => 'filterFieldDigit(this,"")'))->getHtml()?>
+            <?=$this->getHelper('Helper_Form')->getFieldError($this->err->icq)?></td>
+    </tr>
+    <tr>
+        <td>Ваш URL-адрес:</td>
+        <td><?=$this->getHelper('Helper_Form')->inputText('user[url]', $this->user->getUrl(), array('maxlength'=>255, 'class'=>'medium'))->getHtml()?>
+            <?=$this->getHelper('Helper_Form')->getFieldError($this->err->url)?></td>
+    </tr>
+    <tr>
+        <td>Место Вашего проживания:</td>
+        <td>
+            <div class="form_element_block">
+            <? $select = $this->getHelper('Helper_Form')->inputSelect('user[country]', $this->user->user_country, array('onchange'=>'locations_next_operation(this)', 'id'=>'country', 'class' => 'form_element_block'));
+               $select->addOption( $this->getHelper('Helper_Form')->inputOption(0, 'Выберите страну проживания') );
+            ?>
+            <?=$select->getHtml();?> <span title="Укажите место Вашего проживания. Если в списке городов Вы не нашли населённый пункт, в котором проживаете, выберите из списка ближайший к Вашему месту проживания населенный пункт." class="help">?</span>
+            <?=$this->getHelper('Helper_Form')->getFieldError($this->err->country)?>
+            </div>
+
+            <div class="form_element_block">
+            <? $select = $this->getHelper('Helper_Form')->inputSelect('user[region]', $this->user->user_region, array('onchange'=>'locations_next_operation(this)', 'id'=>'region', 'class' => 'form_element_block', 'style'=>"display:none"));
+               $select->addOption( $this->getHelper('Helper_Form')->inputOption(0, 'Выберите регион проживания') );
+            ?>
+            <?=$select->getHtml();?>
+            <?=$this->getHelper('Helper_Form')->getFieldError($this->err->region)?>
+            </div>
+            <div>
+            <?
+            $select = $this->getHelper('Helper_Form')->inputSelect('user[city]', $this->user->user_city, array('onchange'=>'locations_next_operation(this)', 'id'=>'city', 'style'=>"display:none"));
+            $select->addOption( $this->getHelper('Helper_Form')->inputOption(0, 'Выберите город проживания') );
+            echo $select->getHtml();
+            ?>
+            <?=$this->getHelper('Helper_Form')->getFieldError($this->err->city)?></div>
+        </td>
+    </tr>
+</table>
+</fieldset>
+
+<div class="explanatory"><span class="help" title="Правильно!">?</span> — <strong>Значок помощи.</strong> Если Вам что-то не ясно при заполнении полей, поднесите курсор к такому значку напротив текущего поля и, вы получите подсказку.<br /><br /><span class="red_star" style="font-size:100%">*</span> — <strong>Значок обязательного заполнения</strong>. Поле, обозначенное таким значком нужно обязательно заполнить.</div>
+
+<div class="submit_block">
+<?=$this->getHelper('Helper_Form')->inputHidden($this->session_name, $this->session_id)->getHtml()?>
+<?=$this->getHelper('Helper_Form')->inputSubmit('submit', 'Вперед, на шаг 2!')->getHtml()?>
+</div>
+
+</form>
+
+</div> <!-- / Content -->
+
+<script type="text/javascript">
+// <![CDATA[
+// Отмеченные пользователем города и страны.
+// Данный массив нужен для того, что бы можно было по данным значениям
+// сделать selected для списков.
+var checked_user_locations = new Array();
+checked_user_locations['country'] = '<?=$this->user->getCountry()?>';
+checked_user_locations['region'] = '<?=$this->user->getRegion()?>';
+checked_user_locations['city'] = '<?=$this->user->getCity()?>';
+
+// Массив select-ов в их порядке.
+// Данный массив используется в алгоритме функции
+locations_chain = new Array('country', 'region', 'city');
+
+locations_create('country', 0);
+
+<? if ($this->user->getCountry()): ?>
+locations_create('region', <?=$this->user->getCountry()?>);
+locations_visibility('region');
+<? endif; ?>
+
+<? if ($this->user->getRegion()): ?>
+locations_create('city', <?=$this->user->getRegion()?>);
+locations_visibility('city');
+<? endif; ?>
+// ]]>
+</script>
+
+<? include $this->getRealTemplatePath('Common/FrontendBottom') ?>
+</body></html>

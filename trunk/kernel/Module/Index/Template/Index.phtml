@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=windows-1251" />
+<meta name="keywords" content="<?=$this->lang['meta']['keywords']?>" />
+<meta name="description" content="<?=$this->lang['meta']['description']?>" />
+<link rel="stylesheet" href="<?=$this->path['css']?>frontend/main.css" type="text/css" />
+<link rel="shortcut icon" sizes="16x16" href="/favicon.ico" />
+<!--[if IE]>
+    <link rel="stylesheet" type="text/css" href="<?=$this->path['css']?>frontend/all-ie.css" />
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+<script type="text/javascript" src="<?=$this->path['js']?>tooltip.js"></script>
+<script type="text/javascript" src="<?=$this->path['js']?>jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="<?=$this->path['js']?>jquery.corner.js"></script>
+<script type="text/javascript" src="<?=$this->path['js']?>modules/Common/scripts.js"></script>
+<?=$this->getHelper('Html_Title')->getHtml()?>
+</head><body>
+
+<? include $this->getRealTemplatePath('Common/FrontendTop') ?>
+
+<div id="index_index" class="content">
+
+<? include $this->getRealTemplatePath('Common/FrontendNotification') ?>
+
+<h3 id="intro" class="header">Добро пожаловать на <span class="tl_a">a</span><span class="tl_d">d</span><span class="tl_v">v</span><span class="tl_e">e</span><span class="tl_r">r</span><span class="tl_t">t</span><span class="tl_s">s</span><span class="tl_dot">.</span><span class="tl_r2">r</span><span class="tl_u">u</span> &mdash; на сайт частных бесплатных объявлений!</h3>
+<p>У нас вы можете абсолютно бесплатно <a href="/add.xhtml">разместить объявление</a> о купле-продаже любого интересующего вас товара, начиная от квартиры и заканчивая домашними животными. Имеющиеся на данный момент предложения и спрос вы можете посмотреть в каталоге объявлений:</p>
+
+<?php $count = ceil($this->categories->count()/3); ?>
+<table id="categories_list">
+<tr>
+<?php for ($i=0; $i<3; $i++): ?>
+    <td>
+        <?php for ($j=0; $j<$count; $j++): $index = $i+$j+$i*($count-1); ?>
+            <?php if ($this->categories->item($index)): ?>
+                <a class="index_h3 space_nowrap" href="/categories<?=$this->categories->item($index)->getUrl()?>"><span><?=$this->categories->item($index)->getName()?></span></a>
+            <?php endif; ?>
+        <?php endfor; ?>
+    </td>
+<?php endfor; ?>
+</tr>
+</table>
+
+<h3 id="last_advert_header" class="header">Последние добавленные на сайт объявления:</h3>
+
+<?php if($this->adverts && $this->adverts->count()): ?>
+    <?php foreach ($this->adverts as $row): ?>
+    <div class="advert_cover">
+        <div class="advert_content_outer">
+            <article class="advert_content">
+	           <div class="advert_text">
+	               <table class="table-structure">
+                       <tr>
+	                       <td colspan="2">
+	                           <header>
+	                               <h3 class="advert_header">
+	                                   <a href="/categories<?=$row->category->getUrl()?><?=$row->advert->getId()?>.xhtml" id="advert<?=$row->advert->getId()?>"><?=$this->getHelper('Helper_Format')->userDataOutput($row->advert->getHeader())?></a>
+                                   </h3>
+	                           </header>
+	                       </td>
+	                       <td class="right-col" rowspan="5">
+	                           <span class="advert_price space_nowrap">
+	                           <?php if (!$row->advert->getPrice()): ?>
+	                               <!--noindex-->Договорная<!--/noindex-->
+	                           <?php else:?>
+	                               <strong><?=number_format($row->advert->getPrice(),0,"."," ")?></strong> <?=$row->advert->getPriceType()->getAsSymbol()?>
+	                           <?php endif;?>
+	                           </span>
+	                       </td>
+                        </tr>
+	                   <?php if ($row->category->getUrl() !== $this->category_url): ?>
+	                   <tr>
+	                       <td class="left-col description_td"><!--noindex-->Категория:<!--/noindex--></td>
+	                       <td><p><a title="Показать все объявления в категории &laquo;<?=$row->category->getName()?>&raquo;" href="/categories<?=$row->category->getUrl()?>"><?=$row->category->getName()?></a></p></td>
+	                   </tr>
+	                   <?php endif; ?>
+	                   <tr>
+	                       <td class="left-col description_td"><!--noindex-->Тип объявления:<!--/noindex--></td>
+	                       <td><p><a title="Показать все объявления <?=$this->lang->advert_types_form_2->item($row->advert->getType()->getValue())?> в категории &laquo;<?=$row->category->getName()?>&raquo;" href="/categories<?=$row->category->getUrl()?>?type=<?=$row->advert->getType()->getValue()?>"><?=$row->advert->getType()->getAsText()?></a></p></td>
+	                   </tr>
+	                   <tr>
+	                       <td class="left-col description_td"><!--noindex-->Регион:<!--/noindex--></td>
+	                       <td><p>
+	                           <?php if ($row->user_city->getId() || $row->user_region->getId() || $row->user_country->getId()): ?>
+	                               <? if ($row->user_city->getId()): ?><a title="Показать все объявления <?=$this->lang->advert_types_form_2->item($row->advert->getType()->getValue())?> в категории &laquo;<?=$row->category->getName()?>&raquo; в регионе <?=$row->user_city->getNameRu()?>, <?=$row->user_region->getNameRu()?>, <?=$row->user_country->getNameRu()?>" href="/categories<?=$row->category->getUrl()?>?type=<?=$row->advert->getType()->getValue()?>&amp;id_city=<?=$row->user_city->getId()?>&amp;id_region=<?=$row->user_city->getIdRegion()?>&amp;id_country=<?=$row->user_city->getIdCountry()?>"><?=$row->user_city->getNameRu()?></a>,<?php endif; ?>
+	                               <? if ($row->user_region->getId()): ?><a title="Показать все объявления <?=$this->lang->advert_types_form_2->item($row->advert->getType()->getValue())?> в категории &laquo;<?=$row->category->getName()?>&raquo; в регионе <?=$row->user_region->getNameRu()?>, <?=$row->user_country->getNameRu()?>" href="/categories<?=$row->category->getUrl()?>?type=<?=$row->advert->getType()->getValue()?>&amp;id_region=<?=$row->user_region->getId()?>&amp;id_country=<?=$row->user_region->getIdCountry()?>"><?=$row->user_region->getNameRu()?></a>,<?php endif; ?>
+	                               <? if ($row->user_country->getId()): ?><a title="Показать все объявления <?=$this->lang->advert_types_form_2->item($row->advert->getType()->getValue())?> в категории &laquo;<?=$row->category->getName()?>&raquo; в регионе <?=$row->user_country->getNameRu()?>" href="/categories<?=$row->category->getUrl()?>?type=<?=$row->advert->getType()->getValue()?>&amp;id_country=<?=$row->user_country->getId()?>"><?=$row->user_country->getNameRu()?></a><?php endif; ?>
+	                           <?php else: ?>
+	                               не указан
+	                           <?php endif; ?>
+	                           </p>
+	                       </td>
+                       </tr>
+                       <tr>
+                           <td class="text" colspan="2">
+	                           <p>
+	                            <?php
+	                            $advert_text = Helper_Format::getPreviewStr($row->advert->getText(), 200, '...');
+	                            echo $this->getHelper('Helper_Format')->run($advert_text, 'strip_tags', 'hsc', 'entDec', 'bb2html', 'bb2html2strip');
+	                            ?>
+	                           </p>
+	                       </td>
+	                   </tr>
+	               </table>
+	           </div>
+
+               <nav>
+		           <ul class="my-adverts--ul-advert-manager">
+		               <li class="zoom_link">
+		                   <a class="space_nowrap" href="/categories<?=$row->category->getUrl()?><?=$row->advert->getId()?>.xhtml">Посмотреть объявление</a>
+		                   </li>
+		               <li class="advert_date space_nowrap">
+		                   <!--noindex-->Размещено:<!--/noindex-->
+		                   <time datetime="<?=$row->advert->getCreateDate()->format(DateTime::ATOM)?>" pubdate="pubdate"><?=$row->advert->getCreateDate()->formatDateForPeople()?></time>
+		               </li>
+		           </ul>
+               </nav>
+
+	           <div class="div-clear"></div>
+	        </article>
+        </div>
+    </div>
+    <?php endforeach; ?>
+<?php endif; ?>
+
+<div id="bottom_annotation">
+    <p>На сайте бесплатных объявлений Adverts.ru вы можете абсолютно бесплатно и без регистрации подать объявление о покупке или продаже любого товара или услуги. Процесс размещения объявления займет у вас всего несколько минут. Так же без лишних усилий вы найдете на нашем сайте и нужное вам объявление.</p>
+    <p>Adverts.ru — Ваш верный проводник в бескрайнем море товаров и услуг!</p>
+</div>
+
+</div>
+
+<? include $this->getRealTemplatePath('Common/FrontendBottom') ?>
+</body></html>

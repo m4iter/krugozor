@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=windows-1251" />
+<meta name="keywords" content="<?=$this->lang['meta']['keywords']?>" />
+<meta name="description" content="<?=$this->lang['meta']['description']?>" />
+<link rel="stylesheet" href="<?=$this->path['css']?>frontend/main.css" type="text/css" />
+<link rel="shortcut icon" sizes="16x16" href="/favicon.ico" />
+<!--[if IE]>
+    <link rel="stylesheet" type="text/css" href="<?=$this->path['css']?>frontend/all-ie.css" />
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+<script type="text/javascript" src="<?=$this->path['js']?>library/index.js"></script>
+<script type="text/javascript" src="<?=$this->path['js']?>tooltip.js"></script>
+<script type="text/javascript" src="<?=$this->path['js']?>jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="<?=$this->path['js']?>jquery.corner.js"></script>
+<script type="text/javascript" src="<?=$this->path['js']?>modules/Common/scripts.js"></script>
+<?php $this->includeJsModule()?>
+<?=$this->getHelper('Html_Title')->getHtml()?>
+</head><body>
+
+<? include $this->getRealTemplatePath('Common/FrontendTop') ?>
+
+<div id="index_login" class="content">
+
+<h2 class="header"><?=$this->getHelper('Html_Title')->getByIndex(1)?></h2>
+
+<? include $this->getRealTemplatePath('Common/FrontendNotification') ?>
+
+<form id="auth" onsubmit="if (typeof cform != 'undefined' && cform) return cform.isEmptyInput()" method="post" action="<?=$this->hsc_request_uri?>">
+<fieldset><legend>Авторизация</legend>
+
+<?=$this->getHelper('Helper_Form')->getFieldError($this->err->authorization)?>
+<table class="table_structure">
+    <colgroup>
+        <col width="200" />
+        <col width="600" />
+    </colgroup>
+    <tr>
+        <td><span class="red_star">*</span> <strong class="compulsory"><?=$this->lang->login?>:</strong></td>
+        <td><?=$this->getHelper('Helper_Form')->inputText('user[login]', $this->user->getLogin(), array('class'=>'text', 'maxlength'=>255, 'id'=>'user_login', 'title'=>'Введите логин', 'class'=>'text'))->getHtml()?>
+        <?=$this->getHelper('Helper_Form')->getFieldError($this->err->login)?></td>
+    </tr>
+    <tr>
+        <td><span class="red_star">*</span> <strong class="compulsory"><?=$this->lang->password?>:</strong></td>
+        <td><?=$this->getHelper('Helper_Form')->inputPassword('user[password]', '', array('class'=>'text', 'maxlength'=>255, 'id'=>'user_password', 'title'=>'Введите пароль', 'class'=>'text'))->getHtml()?>
+
+            <?=$this->getHelper('Helper_Form')->getFieldError($this->err->password)?></td>
+    </tr>
+    <tr>
+        <td>
+            <span class="red_star">*</span>
+            <?=$this->getHelper('Helper_Form')->Label($this->lang->remember_password.':', 'autologin')->getHtml()?>
+        </td>
+        <td>
+            <?=$this->getHelper('Helper_Form')->inputFullCheckbox('autologin', 1, 0, $this->autologin, array('id'=>'autologin', 'onclick'=>'enabledAutologin(this, \'change_cookie_days\')'))?>
+            <span title="<?=$this->lang->remember_password_description?>" class="help">?</span>
+
+        <div id="change_cookie_days"<? if($this->autologin): ?> style="display:block"<? endif; ?>>Запомнить пароль на <a title="<?=$this->lang->change_days?>" id='CookieDays' onclick="changeCookieDays(this, 'ml_autologin'); return false;"><?=$this->ml_autologin?></a> <?=$this->lang->remember_days?></div>
+        </td>
+    </tr>
+</table>
+</fieldset>
+
+<div class="submit_block">
+    <?=$this->getHelper('Helper_Form')->inputHidden('ml_autologin', $this->ml_autologin, array('id'=>'ml_autologin'))->getHtml()?>
+    <?=$this->getHelper('Helper_Form')->inputHidden('referer', $this->referer)->getHtml()?>
+    <?=$this->getHelper('Helper_Form')->inputSubmit('submit', $this->lang->log_in)->getHtml()?>
+</div>
+</form>
+
+<div class="explanatory"><p>Если Вы забыли свой пароль, то воспользуйтесь <a title="Восстановить забытый пароль" href="/getpassword/">системой восстановления пароля</a>.</p><p>Если Вы не зарегистрированы на сайте, то <a title="Регистрация" href="/registration.xhtml">это можно сделать прямо сейчас</a>.</p></div>
+
+<script type="text/javascript">
+// <![CDATA[
+try {
+    var cform = new checkForm('auth');
+    cform.putFocus();
+} catch (e) {}
+// ]]>
+</script>
+
+</div>
+<? include $this->getRealTemplatePath('Common/FrontendBottom') ?>
+</body></html>

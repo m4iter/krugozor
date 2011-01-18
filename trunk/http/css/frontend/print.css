@@ -1,0 +1,24 @@
+html,body,div {
+	font-size: 12px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	color: #000 !important;
+}
+
+body {
+	margin: 0px;
+}
+
+div#topmenu,div#mainmenu,div#left,div#right,div#blocks,div#footer,div#corner,div#inner_blocks
+	{
+	display: none;
+}
+
+div#header {
+	background: none;
+}
+
+div#content,div#text {
+	border: none;
+	width: 100%;
+	display: block;
+}

@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<script type="text/javascript" src="./library/ajax.js"></script>
+</head>
+
+<body>
+
+<script type="text/javascript">
+
+    // Для асинхронных запросов:
+
+    var async_ajax = new Ajax();
+    async_ajax.setObserverState(
+        function(ajx, xhr) {
+            alert( ajx.getJson2HashByKey()[1] + '   '
+                   + xhr.responseText.substr(1, 12));
+        }
+    ).get("/ajax/country");
+
+
+    // Для синхронных запросов
+    var sync_ajax = new Ajax();
+    sync_ajax.get("/ajax/country?id=1", false);
+    if (sync_ajax.getStatus() == 200) {
+        alert( sync_ajax.getText().substr(1, 12) );
+    } else {
+        alert('Fail: ' + sync_ajax.getStatus());
+    }
+ 
+</script>
+    <div id="as"></div>
+
+</body>
+
+</html>

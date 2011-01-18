@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru" dir="ltr">
+<head>
+<?=$this->getHelper('Html_Title')->getHtml()?>
+<meta http-equiv="Content-language" content="ru" />
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1251" />
+<link rel="stylesheet" href="/http/css/backend/main.css" type="text/css" />
+<script type="text/javascript" src="/http/js/library/index.js"></script>
+<?php $this->includeJsModule()?>
+</head><body>
+
+<div id="center_block"><h3><?=$this->getHelper('Html_Title')->getByIndex(1)?></h3>
+
+<? include $this->getRealTemplatePath('Common/BackendNotification') ?>
+
+<?=$this->getHelper('Helper_Form')->getFieldError($this->err->authorization)?>
+
+<form id="auth" onsubmit="if (typeof cform != 'undefined' && cform) return cform.isEmptyInput()" method="post" action="<?=$this->hsc_request_uri?>">
+<table>
+	<colgroup>
+	    <col width="20%" />
+	    <col width="80%" />
+	</colgroup>
+    <tr>
+        <td><strong class="compulsory"><?=$this->lang->login?>:</strong></td>
+        <td><?=$this->getHelper('Helper_Form')->inputText('user[login]', $this->user->getLogin(), array('class'=>'text', 'maxlength'=>255, 'id'=>'user_login', 'title'=>'Введите логин', 'class'=>'text'))->getHtml()?>
+        <?=$this->getHelper('Helper_Form')->getFieldError($this->err->login)?></td>
+    </tr>
+    <tr>
+        <td><strong class="compulsory"><?=$this->lang->password?>:</strong></td>
+        <td><?=$this->getHelper('Helper_Form')->inputPassword('user[password]', '', array('class'=>'text', 'maxlength'=>255, 'id'=>'user_password', 'title'=>'Введите пароль', 'class'=>'text'))->getHtml()?>
+
+            <?=$this->getHelper('Helper_Form')->getFieldError($this->err->password)?></td>
+    </tr>
+    <tr>
+        <td colspan="2">
+        <div class="form_element_block">
+    		<strong class="compulsory"><?=$this->getHelper('Helper_Form')->Label($this->lang->remember_password.':', 'autologin')->getHtml()?></strong>
+
+            <?=$this->getHelper('Helper_Form')->inputFullCheckbox('autologin', 1, 0, $this->autologin, array('id'=>'autologin', 'onclick'=>'enabledAutologin(this, \'changeCookieDaysBlock\')'))?>
+        </div>
+        <div id="changeCookieDaysBlock" class="form_element_block changeCookieDays"<? if($this->autologin): ?> style="display:block"<? endif; ?>>
+        <?=$this->lang->remember_password_description?><a title="<?=$this->lang->change_days?>" id='CookieDays' href='javascript:void()' onclick="changeCookieDays(this, 'ml_autologin'); return false;"><?=$this->ml_autologin?></a> дней
+        </div>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+        <?=$this->getHelper('Helper_Form')->inputHidden('ml_autologin', $this->ml_autologin, array('id'=>'ml_autologin'))->getHtml()?>
+        <?=$this->getHelper('Helper_Form')->inputHidden('referer', $this->referer)->getHtml()?>
+        <?=$this->getHelper('Helper_Form')->inputSubmit('submit', $this->lang->log_in)->getHtml()?>
+        </td>
+    </tr>
+</table>
+</form></div>
+
+<script type="text/javascript">
+// <![CDATA[
+try {
+    var cform = new checkForm('auth');
+    cform.putFocus();
+} catch (e) {}
+// ]]>
+</script>
+
+</body></html>
