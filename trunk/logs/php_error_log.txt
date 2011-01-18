@@ -1,4 +1,0 @@
-[15-Jan-2011 22:48:53] PHP Catchable fatal error:  Object of class Http_UriPartEntity could not be converted to string in Z:\home\adverts\www\kernel\Base\Controller.php on line 178
-[15-Jan-2011 23:07:46] PHP Parse error:  syntax error, unexpected T_ECHO in Z:\home\adverts\www\kernel\Base\Application.php on line 232
-[15-Jan-2011 23:07:58] PHP Parse error:  syntax error, unexpected ';' in Z:\home\adverts\www\kernel\Base\Application.php on line 232
-[15-Jan-2011 23:08:04] PHP Warning:  Cannot modify header information - headers already sent by (output started at Z:\home\adverts\www\kernel\Base\Application.php:232) in Z:\home\adverts\www\kernel\Http\Response.php on line 79
