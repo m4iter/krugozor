@@ -1,8 +1,0 @@
-<?php if ($this->navigation): ?>
-<div class="navigation_list">
-    Всего элементов: <strong><?=$this->navigation->getCount()?></strong>
-    <? if ($this->navigation->getCount()): ?>
-        <br /><br /><span class="navigation_title">Страницы:</span> <?=$this->getHelper('Helper_Navigation', $this->navigation)->getHtml($navigation_params)?>
-    <? endif; ?>
-</div>
-<? endif; ?>
