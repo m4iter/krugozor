@@ -1,0 +1,6 @@
+AddType application/x-force-download .wmv
+AddType application/x-force-download .3gp
+AddType application/x-force-download .mp4
+AddDefaultCharset cp-1251
+Options +Indexes
+IndexOptions NameWidth=50

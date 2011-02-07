@@ -1,0 +1,166 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+<script type="text/javascript" src="/http/js/library/libJs.js"></script>
+</head>
+
+<body>
+<form id="f">
+<input type="text" name="mytext1">
+</form>
+
+
+<script type="text/javascript">
+
+t = new Function(alert(1));
+t(1,2);
+</script>
+
+
+
+<!-- 
+<script type="text/javascript">
+function Dump(d,l) {
+    if (l == null) l = 1;
+    var s = '';
+    if (typeof(d) == "object") {
+        s += typeof(d) + " {\n";
+        for (var k in d) {
+            for (var i=0; i<l; i++) s += "  ";
+            s += k+": " + Dump(d[k],l+1);
+        }
+        for (var i=0; i<l-1; i++) s += "  ";
+        s += "}\n"
+    } else {
+        s += "" + d + "\n";
+    }
+    return s;
+}
+
+var tst = new Array();
+tst[0] = "Язык PHP";
+
+var question = new Array();
+question[0] = new Array();
+question[0][0] = "Вопрос 1";
+question[0][1] = "Вопрос 2";
+question[0][2] = "Вопрос 3";
+
+var answer = new Array();
+answer[0] = answer[1] = answer[2] = new Array();
+answer[0][0] = "Ответ 1 на вопрос 1";
+answer[0][1] = "Ответ 2 на вопрос 1";
+answer[0][2] = "Ответ 3 на вопрос 1";
+
+answer[1][0] = "Ответ 1 на вопрос 2";
+answer[1][1] = "Ответ 2 на вопрос 2";
+answer[1][2] = "Ответ 3 на вопрос 2";
+
+answer[2][0] = "Ответ 1 на вопрос 3";
+answer[2][1] = "Ответ 2 на вопрос 3";
+answer[2][2] = "Ответ 3 на вопрос 3";
+
+    
+function JS(_lnk)
+{
+    // _lnk - объект узла, соответствующий либо текстовому узлу, 
+    // либо узлу типа HTMLElement
+    var _lnk = _lnk;
+
+    this.get = function(_id)
+    {
+        return new JS(document.getElementById(_id));
+    
+        /*if (_id)
+        {
+            if (!buffer._id)
+            {
+                buffer._id = new JS(document.getElementById(_id));
+            }
+            else
+            {
+                //alert('_id is isset? (' + _id + ': ' + typeof buffer._id + ')');
+            }
+
+            return buffer._id;
+        }
+        else 
+        {
+            //alert('_id is null? (' + _id + ')');
+        }*/
+    }
+
+    this.addElement = function(element)
+    {
+        var element = document.createElement( element.toLowerCase() );
+        _lnk.appendChild(element);
+        return new JS(element);
+    }
+    this.addText = function(text)
+    {
+        var text_element = document.createTextNode(text);
+        _lnk.appendChild(text_element);
+        return this;
+    }
+    this.addAttr = this.addAttribute = function(atr, val)
+    {
+        _lnk.setAttribute(atr, val);
+        return this;
+    }
+
+    this.createElement = function(element)
+    {
+        var element = document.createElement( element.toUpperCase() );
+        return new JS(element);
+    }
+ 
+    this.appendJS = function(_obj)
+    {
+        _lnk.appendChild(_obj.getLnk());
+    }   
+    
+    this.getLnk = function()
+    {
+        return _lnk;
+    }
+    this.top = function()
+    {
+        return new JS(_lnk.parentNode);
+    }
+    
+    this.getAttr = function(atr)
+    {
+        return _lnk.getAttribute(atr);
+    }
+}
+
+var js = new JS();
+
+function question_list()
+{
+    var wrp = js.get('wrap');
+
+    var p = js.createElement('p');
+    p.addText('привет!').addAttribute('style', 'border:1px solid red').addText(' ').addAttr('id', 'privet');
+
+    var a = js.createElement('a').addAttr('href', 'http://yandex.ru').addText('яндекс');
+    p.appendJS(a);
+    a.top().addText(' - лучший поисковик!');
+
+    wrp.appendJS(p);
+
+    var foo = (js.get('wrap1'))
+    (foo.addAttribute('style', 'border:6px solid red'))
+
+}
+
+</script>
+<div id="wrap"></div>
+<div id="wrap1"></div>
+
+<script type="text/javascript">
+question_list();
+</script> -->
+</body>
+</html>

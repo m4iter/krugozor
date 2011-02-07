@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=windows-1251" />
+<meta name="keywords" content="<?=$this->lang['meta']['keywords']?>" />
+<meta name="description" content="<?=$this->lang['meta']['description']?>" />
+<link rel="stylesheet" href="/http/css/frontend/main.css" type="text/css" />
+<link rel="shortcut icon" sizes="16x16" href="/favicon.ico" />
+<!--[if IE]>
+    <link rel="stylesheet" type="text/css" href="/http/css/frontend/all-ie.css" />
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+<script type="text/javascript" src="/http/js/library/index.js"></script>
+<script type="text/javascript" src="/http/js/tooltip.js"></script>
+<script type="text/javascript" src="/http/js/library/locations.js"></script>
+<script type="text/javascript" src="/http/js/opacity.js"></script>
+<script type="text/javascript" src="/http/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="/http/js/jquery.corner.js"></script>
+<script type="text/javascript" src="/http/js/modules/common/scripts.js"></script>
+<script type="text/javascript" src="/http/fckeditor/fckeditor.js"></script>
+<? $this->includeJsModule(); ?>
+<?php
+if ($this->current_user->isGuest()):
+    $this->getHelper('Html_Title')->add('Подача объявления');
+elseif ($this->from_registration):
+    $this->getHelper('Html_Title')->add('Подача объявления. Шаг 2 из 3');
+else:
+    $this->getHelper('Html_Title')->add('Мой личный кабинет');
+
+    if ($this->advert->getId()):
+        $this->getHelper('Html_Title')->add('Мои объявления');
+        $this->getHelper('Html_Title')->add('Редактирование объявления № '.$this->advert->getId());
+    else:
+        $this->getHelper('Html_Title')->add('Добавление объявления');
+    endif;
+endif;
+?>
+<?=$this->getHelper('Html_Title')->getHtml()?>
+</head><body>
+<? include $this->getRealTemplatePath('Common/FrontendTop') ?>
+
+<div id="advert_frontend-edit-advert" class="content">
+
+<h2 class="header">
+<? if ($this->current_user->isGuest()): ?>
+    <?=$this->getHelper('Html_Title')->getByIndex(1)?>
+<? elseif ($this->from_registration): ?>
+    <?=$this->getHelper('Html_Title')->getByIndex(1)?>
+<? else: ?>
+    <a class="space_nowrap" href="/my/"><?=$this->getHelper('Html_Title')->getByIndex(1)?></a> &raquo;
+	<?php if ($this->advert->getId()): ?>
+	   <a class="space_nowrap" href="/my/adverts/"><?=$this->getHelper('Html_Title')->getByIndex(2)?></a> &raquo; <?=$this->getHelper('Html_Title')->getByIndex(3)?>
+	<?php else: ?>
+	   <?=$this->getHelper('Html_Title')->getByIndex(2)?>
+	<?php endif; ?>
+<? endif; ?>
+</h2>
+
+<? include $this->getRealTemplatePath('Common/FrontendNotification') ?>
+
+<h3 class="header">Основные параметры объявления</h3>
+
+<div id="rules"><a title="Закрыть" id="close_rules" href="#"></a><div id="rules_text">Перед тем, как подать объявление, пожалуйста, ознакомьтесь с <a href="/help/terms_of_service#p3" target="_blank">требованиями</a> к подаче объявлений.<br /><br />Запрещается клонирование объявлений в разных рубриках каталога, спам, публикация объявлений, текст которых не несет никакой смысловой нагрузки, а так же реклама веб-сайтов, оккультных услуг и всего того, что с точки зрения законодательства РФ является незаконным.<br /><br />Соблюдение этих простых правил будет гарантировать хорошую и долговременную жизнь вашего объявления на нашем сайте!</div></div>
+
+<form method="post" action="<?=$this->hsc_request_uri?>">
+
+<table class="table_structure">
+    <colgroup>
+        <col width="200" />
+        <col width="600" />
+    </colgroup>
+    <tr>
+        <td><span class="red_star">*</span> <strong class="compulsory">Категория:</strong></td>
+        <td><?
+            $select = $this->getHelper('Helper_Form')->inputSelect('advert[category]', $this->advert->getCategory());
+            $select->addOption( $this->getHelper('Helper_Form')->inputOption('0', 'Выберите') );
+            $categories = $this->getHelper('Module_Category_Helper_Select', $this->tree)->getHtml();
+            foreach ($categories as $option):
+                $select->addOption($option);
+            endforeach;
+            echo $select->getHtml();
+            ?>
+            <?=$this->getHelper('Helper_Form')->getFieldError($this->err->category)?></td>
+    </tr>
+    <tr>
+        <td><span class="red_star">*</span> <strong class="compulsory">Тип объявления:</strong></td>
+        <td><?=$this->getHelper('Helper_Form')->inputHidden('advert[type]', '')->getHtml()?>
+            <?php foreach ($this->advert_types as $type => $value): ?>
+                <?=$this->getHelper('Helper_Form')->inputRadio('advert[type]', $type, $this->advert->getType()->getValue(), array('id'=>'advert_type_'.$type))->getHtml()?> <?=$this->getHelper('Helper_Form')->Label($value, 'advert_type_'.$type)->getHtml()?>
+            <?php endforeach; ?>
+            <?=$this->getHelper('Helper_Form')->getFieldError($this->err->type)?>
+        </td>
+    </tr>
+    <tr>
+        <td><span class="red_star">*</span> <strong class="compulsory">Заголовок объявления:</strong></td>
+        <td><?=$this->getHelper('Helper_Form')->inputText('advert[header]', $this->advert->getHeader(), array('maxlength'=>255, 'class'=>'large'))->getHtml()?> <span class="help" title="Не пишите в данном поле слова &laquo;Продаю&raquo;, &laquo;Покупаю&raquo;, цену и мелкие характеристики объекта сделки. Указывайте ТОЛЬКО наименование объекта совершения сделки, например: &laquo;Автомобиль ВАЗ-2108&raquo;, &laquo;Ноутбук Toshiba Satellite C650D-10Q&raquo;, &laquo;Коллекция бабочек&raquo; и т.д. В противном случае читабельность и восприятие вашего объявления резко снижается.">?</span>
+           <?=$this->getHelper('Helper_Form')->getFieldError($this->err->header)?></td>
+    </tr>
+    <tr>
+        <td><span class="red_star">*</span> <strong class="compulsory">Текст объявления:</strong></td>
+        <td><?=$this->getHelper('Helper_Form')->inputTextarea('advert[text]', $this->advert->getText(), array('id'=>'advert_text'))->getHtml()?> <span class="help" title="Не указывайте в данном поле цену или контактные данные &mdash; для этих параметров есть специальные поля ниже. В противном случае читабельность и восприятие вашего объявления резко снижается.">?</span>
+            <?=$this->getHelper('Helper_Form')->getFieldError($this->err->text)?>
+        </td>
+    </tr>
+    <tr>
+        <td>Цена:</td>
+        <td><?=$this->getHelper('Helper_Form')->inputText('advert[price]', $this->advert->getPrice(), array('maxlength'=>11, 'onkeyup' => 'filterFieldDigit(this,\'\')', 'class'=>'small'))->getHtml()?>
+
+<?
+$select = $this->getHelper('Helper_Form')->inputSelect('advert[price_type]', $this->advert->getPriceType()->getValue());
+foreach ($this->advert_price_types as $price_code => $price_data):
+    $select->addOption( $this->getHelper('Helper_Form')->inputOption($price_code, $price_data[0]) );
+endforeach;
+echo $select->getHtml();
+?>
+
+<span class="help" title="Отсутствие цены будет расцениваться как «Цена договорная»">?</span>
+
+        <?=$this->getHelper('Helper_Form')->getFieldError($this->err->price)?></td>
+    </tr>
+</table>
+<h3 class="header">Контактная информация</h3>
+
+<table class="table_structure">
+    <colgroup>
+        <col width="200" />
+        <col width="600" />
+    </colgroup>
+    <?php if ($this->err->contact_info): ?>
+    <tr><td colspan="2">
+    <?=$this->getHelper('Helper_Form')->getFieldError($this->err->contact_info)?>
+    </td></tr>
+    <?php endif; ?>
+    <tr>
+        <td>Контактное лицо:</td>
+        <td><?=$this->getHelper('Helper_Form')->inputText('advert[user_name]', $this->advert->getUserName(), array('maxlength'=>255, 'class'=>'medium', 'id'=>'advert_user_name'))->getHtml()?>
+            <?=$this->getHelper('Helper_Form')->getFieldError($this->err->user_name)?>
+
+        <?php if ($this->current_user->getFullName() && !$this->current_user->isGuest()): ?>
+        <p class="form_element_block">
+            <?=$this->getHelper('Helper_Form')->inputFullCheckbox('advert[main_user_name]', 1, 0, $this->advert->getMainUserName(), array('id'=>'label_main_user_name', 'onchange' => "set_contact_input_state('advert_user_name')"))?>
+            <label for="label_main_user_name">Контактное лицо &mdash; <b><?=$this->current_user->getFullName()?></b></label>
+            <?php if (!$this->advert->getUserName() || $this->advert->getMainUserName()): ?>
+            <script type="text/javascript">
+            // <![CDATA[
+            set_contact_input_state('advert_user_name');
+            // ]]>
+            </script>
+            <?php endif; ?>
+        </p>
+        <?php else: ?>
+            <?=$this->getHelper('Helper_Form')->inputHidden('advert[main_user_name]', 0)->getHtml()?>
+        <?php endif; ?>
+        </td>
+    </tr>
+    <tr>
+        <td>Телефон:</td>
+        <td><?=$this->getHelper('Helper_Form')->inputText('advert[phone]', $this->advert->getPhone(), array('maxlength'=>255, 'class'=>'medium', 'id'=>'advert_phone'))->getHtml()?>
+            <?=$this->getHelper('Helper_Form')->getFieldError($this->err->phone)?>
+
+        <?php if ($this->current_user->getPhone()): ?>
+        <p class="form_element_block">
+            <?=$this->getHelper('Helper_Form')->inputFullCheckbox('advert[main_phone]', 1, 0, $this->advert->getMainPhone(), array('id'=>'label_main_phone', 'onchange' => "set_contact_input_state('advert_phone')"))?>
+            <label for="label_main_phone">Использовать для связи мой основной телефон <b><?=$this->current_user->getPhone()?></b></label>
+            <?php if (!$this->advert->getPhone() || $this->advert->getMainPhone()): ?>
+            <script type="text/javascript">
+            // <![CDATA[
+            set_contact_input_state('advert_phone');
+            // ]]>
+            </script>
+            <?php endif; ?>
+        </p>
+        <?php else: ?>
+            <?=$this->getHelper('Helper_Form')->inputHidden('advert[main_phone]', 0)->getHtml()?>
+        <?php endif; ?>
+        </td>
+    </tr>
+    <tr>
+        <td>Email-адрес:</td>
+        <td><?=$this->getHelper('Helper_Form')->inputText('advert[email]', $this->advert->getEmail(), array('maxlength'=>255, 'class'=>'medium', 'id'=>'advert_email'))->getHtml()?>
+            <?=$this->getHelper('Helper_Form')->getFieldError($this->err->email)?>
+
+        <?php if ($this->current_user->getMail()->getValue()): ?>
+        <p class="form_element_block">
+            <?=$this->getHelper('Helper_Form')->inputFullCheckbox('advert[main_email]', 1, 0, $this->advert->getMainEmail(), array('id'=>'label_main_email', 'onchange' => "set_contact_input_state('advert_email')"))?>
+            <label for="label_main_email">Использовать для связи мой основной email-адрес <b><?=$this->current_user->getMail()->getValue()?></b></label>
+            <?php if (!$this->advert->getEmail() || $this->advert->getMainEmail()): ?>
+            <script type="text/javascript">
+            // <![CDATA[
+            set_contact_input_state('advert_email');
+            // ]]>
+            </script>
+            <?php endif; ?>
+        </p>
+        <?php else: ?>
+            <?=$this->getHelper('Helper_Form')->inputHidden('advert[main_email]', 0)->getHtml()?>
+        <?php endif; ?>
+        </td>
+    </tr>
+    <tr>
+        <td>Web-сайт:</td>
+        <td><?=$this->getHelper('Helper_Form')->inputText('advert[url]', $this->advert->getUrl() ?: 'http://', array('maxlength'=>255, 'class'=>'medium', 'id'=>'advert_url'))->getHtml()?>
+            <?=$this->getHelper('Helper_Form')->getFieldError($this->err->url)?>
+
+        <?php if ($this->current_user->getUrl()): ?>
+        <p class="form_element_block">
+            <?=$this->getHelper('Helper_Form')->inputFullCheckbox('advert[main_url]', 1, 0, $this->advert->getMainUrl(), array('id'=>'label_main_url', 'onchange' => "set_contact_input_state('advert_url')"))?>
+            <label for="label_main_url">Использовать для связи мой основной URL-адрес <b><?=Helper_Format::correctHttpUrl($this->current_user->getUrl())?></b></label>
+            <?php if (!$this->advert->getUrl() || $this->advert->getMainUrl()): ?>
+            <script type="text/javascript">
+            // <![CDATA[
+            set_contact_input_state('advert_url');
+            // ]]>
+            </script>
+            <?php endif; ?>
+        </p>
+        <?php else: ?>
+            <?=$this->getHelper('Helper_Form')->inputHidden('advert[main_url]', 0)->getHtml()?>
+        <?php endif; ?>
+        </td>
+    </tr>
+    <tr>
+        <td>ICQ:</td>
+        <td><?=$this->getHelper('Helper_Form')->inputText('advert[icq]', $this->advert->getIcq(), array('maxlength'=>10, 'class'=>'medium', 'onkeyup' => "filterFieldDigit(this)", 'id'=>'advert_icq'))->getHtml()?>
+            <?=$this->getHelper('Helper_Form')->getFieldError($this->err->icq)?>
+
+        <?php if ($this->current_user->getIcq()): ?>
+        <p class="form_element_block">
+            <?=$this->getHelper('Helper_Form')->inputFullCheckbox('advert[main_icq]', 1, 0, $this->advert->getMainIcq(), array('id'=>'label_main_icq', 'onchange' => "set_contact_input_state('advert_icq')"))?>
+            <label for="label_main_icq">Использовать для связи мой основной ICQ <b><?=$this->current_user->getIcq()?></b></label>
+            <?php if (!$this->advert->getIcq() || $this->advert->getMainIcq()): ?>
+            <script type="text/javascript">
+            // <![CDATA[
+            set_contact_input_state('advert_icq');
+            // ]]>
+            </script>
+            <?php endif; ?>
+        </p>
+        <?php else: ?>
+            <?=$this->getHelper('Helper_Form')->inputHidden('advert[main_icq]', 0)->getHtml()?>
+        <?php endif; ?>
+        </td>
+    </tr>
+    <tr>
+        <td><p>Ваше физическое местоположение:</p></td>
+        <td>
+            <div class="form_element_block">
+            <? $select = $this->getHelper('Helper_Form')->inputSelect('advert[place_country]', $this->advert->place_country, array('onchange'=>'locations_next_operation(this)', 'id'=>'country', 'class' => 'form_element_block'));
+               $select->addOption( $this->getHelper('Helper_Form')->inputOption(0, 'Выберите страну проживания') );
+            ?>
+            <?=$select->getHtml();?>
+            <span class="help" title="Укажите местоположение, в котором будет проходить сделка, осмотр объектов сделки или в котором находится объект сделки.">?</span>
+
+            <?=$this->getHelper('Helper_Form')->getFieldError($this->err->place_country)?>
+            </div>
+
+            <div class="form_element_block">
+            <? $select = $this->getHelper('Helper_Form')->inputSelect('advert[place_region]', $this->advert->place_region, array('onchange'=>'locations_next_operation(this)', 'id'=>'region', 'class' => 'form_element_block'));
+               $select->addOption( $this->getHelper('Helper_Form')->inputOption(0, 'Выберите регион проживания') );
+            ?>
+            <?=$select->getHtml();?>
+            <?=$this->getHelper('Helper_Form')->getFieldError($this->err->place_region)?>
+            </div>
+            <div class="form_element_block">
+            <?
+            $select = $this->getHelper('Helper_Form')->inputSelect('advert[place_city]', $this->advert->place_city, array('onchange'=>'locations_next_operation(this)', 'id'=>'city'));
+            $select->addOption( $this->getHelper('Helper_Form')->inputOption(0, 'Выберите город проживания') );
+            echo $select->getHtml();
+            ?>
+            <?=$this->getHelper('Helper_Form')->getFieldError($this->err->place_city)?></div>
+
+            <?php if (0): ?>
+            <?=$this->getHelper('Helper_Form')->inputFullCheckbox('advert[place_not_important]', 1, 0, $this->advert->getPlaceNotImportant(), array('id'=>'label_place_not_important'))?>
+            <label for="label_place_not_important">Местоположение для совершения сделки роли не играет</label> <span class="help" title="Отметьте этот параметр ТОЛЬКО в том случае, если Вы что-то продаете или покупаете исключительно по Интернету (с помощью почты/спецсвязи). В противном случае обязательно укажите ближайшее местоположение места совершения сделки &mdash; это необходимо для того, что бы объявление заинтересовало ваших потенциальных клиентов &mdash; жителей вашего региона!">?</span>
+            <?php endif; ?>
+        </td>
+    </tr>
+    <?php if ($this->current_user->isGuest() && 0): ?>
+    <tr>
+        <td><span class="red_star">*</span> <strong class="compulsory">Введите цифры<br />с изображения:</strong></td>
+        <td><p><img onclick="this.src=this.src+'&amp;'+Math.round(Math.random())" alt="<?=$this->lang->captcha_help?>" title="Если Вы не видите число на картинке, нажмите на картинку мышкой" src="/captcha/?<?=$this->session_name?>=<?=$this->session_id?>" /></p>
+            <?=$this->getHelper('Helper_Form')->inputText('captcha_code', $this->captcha_code, array('onkeyup' => 'filterFieldDigit(this,"")', 'maxlength' => 4, 'style'=>'width:4em'))->getHtml()?> <span class="help" title="Если Вы не видите число на картинке, нажмите на картинку мышкой">?</span>
+            <?=$this->getHelper('Helper_Form')->inputHidden($this->session_name, $this->session_id)->getHtml()?>
+            <?=$this->getHelper('Helper_Form')->getFieldError($this->err->captcha)?>
+        </td>
+    </tr>
+    <?php endif; ?>
+</table>
+
+<div class="submit_block">
+    <?=$this->getHelper('Helper_Form')->inputHidden('advert[id]', $this->advert->getId())->getHtml()?>
+    <?=$this->getHelper('Helper_Form')->inputSubmit('submit_normal', 'Далее')->getHtml()?>
+</div>
+
+<div id="terms_of_service">Подавая объявление, Вы соглашаетесь с <a target="_blank" href="/articles/terms_of_service.xhtml">условиями использования сайта</a></div>
+
+</form>
+
+</div>
+
+<script type="text/javascript">
+// <![CDATA[
+// Отмеченные пользователем города и страны.
+// Данный массив нужен для того, что бы можно было по данным значениям
+// сделать selected для списков.
+var checked_user_locations = new Array();
+checked_user_locations['country'] = '<?=$this->advert->getPlaceCountry()?>';
+checked_user_locations['region'] = '<?=$this->advert->getPlaceRegion()?>';
+checked_user_locations['city'] = '<?=$this->advert->getPlaceCity()?>';
+
+// Массив select-ов в их порядке.
+// Данный массив используется в алгоритме функции
+locations_chain = new Array('country', 'region', 'city');
+
+locations_create('country', 0);
+
+<? if ($this->advert->getPlaceCountry()): ?>
+locations_create('region', <?=$this->advert->getPlaceCountry()?>);
+locations_visibility('region');
+<? endif; ?>
+
+<? if ($this->advert->getPlaceRegion()): ?>
+locations_create('city', <?=$this->advert->getPlaceRegion()?>);
+locations_visibility('city');
+<? endif; ?>
+// ]]>
+</script>
+
+<? include $this->getRealTemplatePath('Common/FrontendBottom') ?>
+</body></html>

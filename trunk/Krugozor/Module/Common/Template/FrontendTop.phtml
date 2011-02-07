@@ -1,0 +1,58 @@
+<header>
+	<!--[if lte IE 7]>
+	    <noindex><div id="old_ie">
+	    Вы пользуетесь слишком старым браузером!
+	    Сайт будет отображаться как минимум очень медленно, а скорее всего ещё и не полностью корректно.
+	    Обновите свой браузер до последней версии (<a href="http://www.microsoft.com/rus/windows/internet-explorer/" rel="external,nofollow">Internet Explorer 8</a>), или скачайте любой другой, более современный: <br />
+	    <a href="http://www.mozilla.com/ru/" rel="external,nofollow">Mozilla Firefox</a>,
+	    <a href="http://www.google.ru/chrome" rel="external,nofollow">Google Chrome</a>,
+	    <a href="http://opera.com/" rel="external,nofollow">Opera</a>,
+	    <a href="http://www.apple.com/ru/safari/download/" rel="external,nofollow">Safari</a>
+	    </div></noindex>
+	<![endif]-->
+
+	<div id="topTime">Сегодня <?=date('d')?> <?=$this->lang->months_genitive->item(date('n'))?>, <?=$this->lang->days_nominative->item(date('N'))?>, <?=date('H')?>:<?=date('i')?> по Москве</div>
+
+	<div id="top">
+	    <div id="top_left">
+	        <a href="http://<?=$_SERVER['HTTP_HOST']?>/"><img src="/http/image/desing/logo_.png" alt="<?=$this->getHelper('Html_Title')->getByIndex(0)?>" /></a>
+	    </div>
+	    <div id="top_right">
+			<table><tr><td>
+			    <!--noindex-->
+				<script type="text/javascript">
+				<!--
+				var RndNum4NoCash = Math.round(Math.random() * 1000000000);
+				var ar_Tail='unknown'; if (document.referrer) ar_Tail = escape(document.referrer);
+				document.write(
+				'<iframe src="http://ad.adriver.ru/cgi-bin/erle.cgi'
+				+ '?sid=161353&bn=0&target=blank&bt=1&pz=0&tail256=' + ar_Tail + '&rnd=' + RndNum4NoCash
+				+ '" frameborder=0 vspace=0 hspace=0 width=468 height=60'
+				+ ' marginwidth=0 marginheight=0 scrolling=no></iframe>');
+				// -->
+				</script>
+				<noscript>
+				<a href="http://ad.adriver.ru/cgi-bin/click.cgi?sid=161353&amp;bn=0&amp;bt=1&amp;pz=0&amp;rnd=524179677" target="_blank"><img src="http://ad.adriver.ru/cgi-bin/rle.cgi?sid=161353&amp;bn=0&amp;bt=1&amp;pz=0&amp;rnd=524179677" alt="" width="468" height="60" /></a>
+				</noscript>
+				<!--/noindex-->
+			</td></tr></table>
+	    </div>
+	</div>
+
+	<div id="topMenu">
+	    <? if($this->current_user && $this->current_user->isGuest()): ?>
+	        <a class="space_nowrap" href="/add.xhtml"><strong>Подать объявление</strong></a> <span class="separator">|</span>
+	        <a class="space_nowrap" href="/my/"><strong>Войти в личный кабинет</strong></a> <span class="separator">|</span>
+	        <a class="space_nowrap" href="/help/faq"><strong>Вопросы и ответы</strong></a>
+	    <? else: ?>
+	        <div id="topMenu_right">
+	            <a onclick="return confirm('Вы действительно хотите завершить работу с сайтом?')" href="/logout/?referer=<?=$this->urlencode_full_request_uri?>"><img src="/http/image/desing/icon/exit.png" title="Выйти из системы" alt="" /></a>
+
+	            Добро пожаловать, <strong><?=$this->getHelper('Helper_Format')->hsc($this->current_user->getFullNameOrLogin())?></strong>!
+	        </div>
+	        <a class="space_nowrap" href="/my/adverts/edit/"><strong>Создать новое объявление</strong></a> <span class="separator">|</span>
+	        <a class="space_nowrap" href="/my/"><strong>Мой личный кабинет</strong></a> <span class="separator">|</span>
+	        <a class="space_nowrap" href="/help/faq"><strong>Вопросы и ответы</strong></a>
+	    <? endif; ?>
+	</div>
+</header>

@@ -1,0 +1,631 @@
+/* Блок, рисующий горизонтальную синюю черту сверху */
+div#topTime{
+    padding:4px;
+    background-color:#336699;
+    color:#CCCCCC;
+    font-size:11px;
+    text-align:right;
+}
+/* Блок логотипа и баннера */
+div#top{
+    text-align:left;
+    padding:5px;
+}
+div#top div#top_left,
+div#top div#top_right{
+    width:50%;
+    height:102px;
+}
+div#top div#top_left{
+    float:left;
+}
+div#top div#top_left img{
+    margin:20px 0 20px 25px;
+}
+div#top div#top_right{
+    float:left;
+    text-align:center;
+}
+div#top div#top_right table{
+    height:102px;
+    vertical-align:middle;
+    width:100%;
+}
+
+/* Меню */
+div#topMenu{
+    background-color:#f5f5f5;
+    padding:8px 5px 8px 25px;
+    border-top:0 solid #336699;
+    clear:both;
+    text-align:left;
+}
+/* Блок с приветствием и кнопкой выход справа */
+div#topMenu_right{
+    float:right;
+}
+/* картинка выхода из системы */
+div#topMenu_right img{
+    float:right;
+    margin-left:5px;
+}
+/* сепараторы меню */
+#topMenu span.separator{
+    color:#CCCCCC;
+}
+
+
+div.content{
+    margin:20px;
+}
+
+
+/* Главная страница */
+div#index_index h3#intro,
+div#index_index h3#last_advert_header{
+    text-align:center;
+}
+div#index_index h3#last_advert_header{
+    margin:11px 0 20px 0;   
+}
+div#index_index table#categories_list,
+div#category_frontend-categories-list table#categories_list{
+    width:100%;
+    border-collapse:separate ;
+    border:none;
+    margin:0;
+}
+div#index_index table#categories_list tr td, 
+div#category_frontend-categories-list table#categories_list tr td{
+    vertical-align:top;
+    padding:2px;
+}
+div#index_index table#categories_list tr td a,
+div#category_frontend-categories-list table#categories_list tr td a{
+    font-size:18px;
+    margin:7px 0 7px 0;
+    padding:9px;
+    color:#113B63;
+    display:block;
+    background-color:#f2f2f2;
+    text-decoration:none;
+}
+div#index_index table#categories_list tr td a:hover,
+div#category_frontend-categories-list table#categories_list tr td a:hover{
+    background-color:#336699;
+    color:#fff;
+}
+div#index_index div#bottom_annotation,
+div#advert_frontend-category-list div#bottom_annotation,
+div#advert_frontend-category-list div.subcategories div#category_description{
+    font-size:11px;
+    color:#666;
+    margin:20px 10px;
+    text-align:justify;
+}
+
+
+/*  todo: вынести куда надо */
+h3#last_adverts_types{
+    margin:20px 0 10px 0; 
+}
+
+
+
+/* Список объявлений */
+/* Субкатегории */
+div#advert_frontend-category-list div.subcategories{
+    margin:0 0 20px 20px;
+}
+div#advert_frontend-category-list div.subcategories div#category_description{
+    width:50%;
+    clear:right;
+    float:right;
+    margin:20px;
+}
+div#advert_frontend-category-list div.subcategories h3{
+    margin:0 0 0 0;
+}
+div#advert_frontend-category-list div.subcategories ul{
+    margin:20px 0 20px 30px;
+    list-style-type:none;
+}
+div#advert_frontend-category-list div.subcategories ul li{
+    line-height:20px;
+}
+div#advert_frontend-category-list div.subcategories ul li{
+    font-weight:bold;
+}
+/* Фильтр на странице показа списка объявлений */
+div#advert_frontend-category-list form#filter{
+    margin:20px 0 20px 30px;
+    display:block;
+}
+div#advert_frontend-category-list form#filter label{
+    font-size:15px;
+    font-weight:bold;
+    padding:4px;
+    cursor:pointer;
+}
+div#advert_frontend-category-list form#filter input[type="radio"]{
+    display:none;
+}
+div#advert_frontend-category-list form#filter input[type="submit"]{
+    padding:1px 3px 1px 3px;
+    font-weight:bold;
+}
+div#advert_frontend-category-list form#filter select option{
+    padding:1px 0 0 3px;
+}
+div#advert_frontend-category-list form#filter > table{
+    border-collapse:collapse;
+}
+div#advert_frontend-category-list form#filter > table > tbody > tr > td{  
+    padding:5px 10px 5px 0;
+}
+div#advert_frontend-category-list form#filter > table > tbody > tr > td:first-child,
+div#advert_frontend-category-list form#filter > table > tbody > tr > td > span{
+    white-space:nowrap;
+}
+div#advert_frontend-category-list form#filter > table > tbody > tr > td > span{
+    padding:3px 0px 3px 0px;
+    margin:0 10px 0 0;
+    color:#113B63;
+}
+div#advert_frontend-category-list form#filter > table > tbody > tr > td > span:hover{
+    color:#fff;
+    background-color:#336699;
+}
+div#advert_frontend-category-list form#filter > table > tbody > tr > td > span.active{
+    color:#fff;
+    background-color:#994015;
+}
+/* Заголовок "фильтр по объявлениям", вариации */
+div#advert_frontend-category-list span#filter_online,
+div#advert_frontend-category-list span#filter_offline{
+    padding-left:20px;
+    cursor:help;
+}
+div#advert_frontend-category-list span#filter_online{
+    background:url('/http/image/desing/icon/online.png') center left no-repeat;
+}
+div#advert_frontend-category-list span#filter_offline{
+    background:url('/http/image/desing/icon/offline.png') center left no-repeat;
+}
+
+
+
+
+
+
+/* Авторизация в личном кабинете */
+div#change_cookie_days {
+    font-size:11px;
+    display:none;
+    padding:10px 0 10px 0;
+}
+div#change_cookie_days a,
+div#change_cookie_days a:link {
+    border: 1px solid #CCC;
+    padding: 3px;
+    text-decoration: none;
+}
+div#change_cookie_days a:hover {
+    background-color: #E6E6FA;
+}
+
+/* Список доступных действий в личном кабинете */
+ul#my_actions{
+    margin:1em 5em 1em 5em;
+}
+ul#my_actions li{
+    margin:20px 20px 10px 20px;
+    font-size:18px;
+}
+ul#my_actions li a{
+    margin-left:7px;
+}
+
+/* Структурирующая формы таблица */
+.table_structure {
+    width:800px;
+}
+.table_structure td {
+    padding:5px 0 5px 0;
+}
+
+
+/* Блок кнопки подачи POST запроса */
+div.submit_block {
+    margin:20px auto;
+    padding:0;
+	text-align:center;
+	clear:both;
+}
+div.submit_block input{
+	text-align:center;
+    font-weignt:bold;
+    font-size:18px;
+}
+div#terms_of_service{
+	font-size:11px;
+	text-align:center;
+	color:#333;
+}
+
+
+/* Бок вывода объявления с анонсом */
+div.advert_cover{
+	margin:5px 20px 5px 20px;
+	padding:0 0 0px 0;
+}
+div.advert_content_outer{
+	background-color:#CCCCCC;
+}
+article.advert_content{
+	background-color:#FFF8E8;
+}
+h3.advert_header{
+	clear:both;
+	margin:0px 5px 5px 0px;
+    /*background-color:#F5DF94;*/
+	background:none;
+	padding:0;
+	font-weight:bold;
+	font-size:17px;
+	color:#113B63;
+}
+h3.advert_header a{
+	color:#0033CC !important;
+	text-decoration:underline ;
+	display:block;
+}
+div.advert_text{
+	padding:5px 10px 5px 10px;
+	word-wrap: break-word;
+}
+
+div.robot{
+	background:url('/http/image/desing/icon/robot.gif') 23px no-repeat;
+	padding:20px 20px 20px 150px;
+}
+
+div.subcategories{
+	margin:0 0 20px 20px;
+}
+div.subcategories h3{
+	margin:0 0 0 0;
+}
+div.subcategories ul{
+	margin:20px 0 20px 30px;
+	list-style-type:none;
+}
+div.subcategories ul li{
+	line-height:20px;
+}
+div.subcategories ul li{
+	font-weight:bold;
+}
+
+/* Таблица показа объявления */
+table.table-structure{
+	width:100%;
+	border-collapse:collapse;
+	border:none;
+}
+table.table-structure td.left-col,
+table.table-structure td p{
+    font-size:11px;
+}
+table.table-structure td.left-col{
+    width:5%;
+	padding-right:10px;
+	white-space:nowrap;
+}
+table.table-structure td.right-col{
+    width:200px;
+	text-align:center;
+	font-size:18px;
+}
+table.table-structure td.right-col span{
+    font-size:16px;
+    padding:7px;
+    background-color:#336699;
+	color:#FFF;
+	box-shadow: 2px 2px 6px #999;
+    -webkit-box-shadow: 2px 2px 6px #999;
+    -moz-box-shadow: 2px 2px 6px #999;
+}
+table.table-structure td.right-col strong{
+	font-size:17px;
+}
+table.table-structure td p{
+    margin:1px 0 1px 0;
+}
+table.table-structure td a{
+	text-decoration:none;
+	color:#395773;
+}
+table.table-structure td a:hover{
+	text-decoration:underline;
+}
+table.table-structure td.description_td{
+	font-weight:bold;
+	color:#113B63;
+}
+table.table-structure td.text p{
+    margin:5px 0 3px 0;
+	font-size:inherit;
+}
+
+/* Полный View объявления */
+div.view_full div.advert_text{
+    padding:10px;
+}
+div.view_full h3.advert_header{
+    margin-bottom:10px;
+}
+div.view_full table.table-structure tr td.text p{
+    margin:10px 0 10px 0;
+}
+div.view_full table.table-structure td.left-col,
+div.view_full table.table-structure td p{
+	font-size:inherit;
+}
+
+/* Менеджер управления каждым объявлением в личнм кабинете */
+ul.my-adverts--ul-advert-manager{
+	list-style-type:none;
+	margin:0 10px 0 10px;
+	padding:0 0 0 0;
+	border-top:1px dashed #CCC;
+	display:block;
+	clear:both;
+}
+ul.my-adverts--ul-advert-manager li{
+    margin:7px 20px 7px 0;
+    float:left;
+    display:block;
+	font-size:11px;
+    line-height:16px;
+	color:#666666;
+}
+ul.my-adverts--ul-advert-manager li{
+    padding-left:20px;
+}
+ul.my-adverts--ul-advert-manager li.edit_link{
+    background:url('/http/image/desing/icon/edit.png') center left no-repeat;
+}
+ul.my-adverts--ul-advert-manager li.zoom_link{
+    background:url('/http/image/desing/icon/zoom.png') center left no-repeat;
+}
+ul.my-adverts--ul-advert-manager li.up_link{
+    background:url('/http/image/desing/icon/arrow_up.png') center left no-repeat;
+}
+ul.my-adverts--ul-advert-manager li.lock_link{
+    background:url('/http/image/desing/icon/lock.png') center left no-repeat;
+}
+ul.my-adverts--ul-advert-manager li.lock-open_link{
+    background:url('/http/image/desing/icon/lock-open.png') center left no-repeat;
+}
+ul.my-adverts--ul-advert-manager li.delete_link{
+    background:url('/http/image/desing/icon/delete.png') center left no-repeat;
+}
+ul.my-adverts--ul-advert-manager li.advert_date{
+    background:url('/http/image/desing/icon/information.png') center left no-repeat;
+}
+ul#similar_adverts{
+	margin:0 0 0 60px;
+}
+ul#similar_adverts li{
+	margin:5px 0 5px 0;
+}
+ul#similar_adverts li > a{
+    ;
+}
+ul#similar_adverts li > span{
+	color:#666;
+}
+
+
+
+
+
+/*  Главный нижний блок, в который заключены все последующие блоки  */
+footer{
+	background-color:#F5F5F5;
+	margin-top:10px;
+	clear:both;
+}
+/*  Блок, в котором написаны копирайты  */
+footer div#bottom_info{
+	padding:5px;
+	color:#FFFFFF;
+	background-color:#336699;
+	font-size:85%;
+}
+footer div#bottom_right_copyright{
+     float:right;
+}
+footer div#bottom_right_copyright a,
+footer div#bottom_left_copyright a{
+    text-decoration:none;
+    color:#FFF;
+}
+footer div#bottom_right_copyright a:hover,
+footer div#bottom_left_copyright a:hover{
+     text-decoration:underline;
+}
+footer div#bottom_buttons{
+	text-align:center;
+	padding:10px;
+}
+footer div#bottom_buttons img{
+	filter:progid:DXImageTransform.Microsoft.Alpha(opacity=40); /* IE 5.5+*/
+	filter:alpha(opacity=40); /* IE 5-7 */
+    -moz-opacity: 0.4; /* Mozilla 1.6 и ниже */
+    -khtml-opacity: 0.4; /* Konqueror 3.1, Safari 1.1 */
+    opacity: 0.4; /* CSS3 - Mozilla 1.7b +, Firefox 0.9 +, Safari 1.2+, Opera 9+ */
+}
+footer div#bottom_buttons img:hover{
+    filter:progid:DXImageTransform.Microsoft.Alpha(opacity=100); /* IE 5.5+*/
+    filter:alpha(opacity=100); /* IE 5-7 */
+    -moz-opacity: 1; /* Mozilla 1.6 и ниже */
+    -khtml-opacity: 1; /* Konqueror 3.1, Safari 1.1 */
+    opacity: 1; /* CSS3 - Mozilla 1.7b +, Firefox 0.9 +, Safari 1.2+, Opera 9+ */
+}
+
+
+/* Конкретные страницы */
+
+
+/* Выбор способа добавления объявления */
+div#advert_frontend-add table#table-structure{
+    width:100%;
+    border:none;
+    border-collapse:collapse;
+}
+div#advert_frontend-add table#table-structure tr td{
+    width:50%;
+    vertical-align:top;
+}
+div#advert_frontend-add table#table-structure tr td h3{
+    color:#113B63;
+    background:none;
+    font-weight:bold;
+    text-align:center;
+}
+div#advert_frontend-add ul.plus,
+div#advert_frontend-add ul.minus,
+div#advert_frontend-add ul.information{
+    margin:0px 20px 0px 20px;
+    list-style-type:none;
+}
+div#advert_frontend-add ul.plus li,
+div#advert_frontend-add ul.minus li,
+div#advert_frontend-add ul.information li{
+    padding:0 0 0 23px;
+    margin-bottom:10px;
+}
+div#advert_frontend-add ul.plus li{
+    background:url('/http/image/desing/icon/plus.png') center left no-repeat;
+}
+div#advert_frontend-add ul.minus li{
+    background:url('/http/image/desing/icon/minus.png') center left no-repeat;
+}
+div#advert_frontend-add ul.information li{
+    background:url('/http/image/desing/icon/information.png') center left no-repeat;
+}
+div#advert_frontend-add p.add_advert{
+    font-size:18px;
+    text-align:center;
+    margin:20px 0 20px 0;
+}
+
+
+/* Редактирование объявлений */
+div#advert_frontend-edit-advert div#rules{
+    border:1px solid #CCC;
+    padding:5px 25px 5px 5px;
+    margin:0 20px 0 0;
+    width:230px;
+    font-size:11px;
+    color:#333;
+    float:right;
+    position:fixed;
+    right:0;
+    z-index:1;
+    background-color:#F0F0F0;
+    
+    -moz-border-radius:4px;
+    -khtml-border-radius:4px;
+    border-radius:4px;
+    -webkit-border-radius:4px;
+    
+    box-shadow: 2px 2px 6px #999;
+    -webkit-box-shadow: 2px 2px 6px #999;
+    -moz-box-shadow: 2px 2px 6px #999;
+}
+div#advert_frontend-edit-advert div#rules a#close_rules{
+    width:16px;
+    height:16px;
+    background:url('/http/image/desing/icon/information.png') no-repeat;
+    position:absolute;
+    right:5px;  
+}
+div#advert_frontend-edit-advert div#rules a#close_rules:hover {
+    background:url('/http/image/desing/icon/delete.png') no-repeat;
+}
+div#advert_frontend-edit-advert div#rules div#rules_text{
+    background-color:#fff;
+    padding:5px;
+    
+    -moz-border-radius:4px;
+    -khtml-border-radius:4px;
+    border-radius:4px;
+    -webkit-border-radius:4px;
+}
+
+
+/* Восстановление пароля */
+div#user_frontend-getpassword div#left {
+	width:60%;
+	float:left;
+	text-align:justify;
+}
+div#user_frontend-getpassword div#right {
+	width:40%;
+	margin-right:-20px;
+	float:right;
+}
+
+
+/* Хелпы */
+article#help{
+    padding: 0 10px 0 10px;
+}
+article#help > p{
+    margin:20px 0 20px 0;
+}
+article#help h3{
+    background-color:transparent;
+    margin:0 0 10px 0;
+    padding:0;
+}
+article#help ul, 
+article#help ol{
+    margin:20px 0 20px 50px;
+}
+article#help ul.poleznye_sovety{
+    list-style-type:none;
+    margin:20px 0 20px 20px;
+}
+article#help ul.poleznye_sovety li{
+    margin-bottom:15px;
+}
+article#help ol.faq_questions{
+    margin-top:50px;
+}
+article#help ol.faq_questions > li {
+    margin-bottom:25px;
+}
+article#help ol.faq_questions li h4{
+    background-color:transparent;
+    color:#000;
+    font-weight:bold;
+    padding:0;
+    margin:0 0 10px 0;
+}
+/* Блок "к содержанию" */
+article#help div.location_top{
+    text-align:right;
+}
+article#help div.location_top a{
+    background:url('/http/image/desing/icon/arrow_up.png') center right no-repeat;
+    padding-right:16px;
+    color:#395773;
+}
+/* Стили списков FAQ */
+article#help ol.faq_questions li p{
+    margin:10px 0 10px 0;
+}
