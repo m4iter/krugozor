@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=windows-1251" />
+<meta name="keywords" content="<?=$this->lang['meta']['keywords']?>" />
+<meta name="description" content="<?=$this->lang['meta']['description']?>" />
+<link rel="stylesheet" href="/http/css/frontend/main.css" type="text/css" />
+<link rel="shortcut icon" sizes="16x16" href="/favicon.ico" />
+<!--[if IE]>
+    <link rel="stylesheet" type="text/css" href="/http/css/frontend/all-ie.css" />
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+<script type="text/javascript" src="/http/js/library/index.js"></script>
+<script type="text/javascript" src="/http/js/tooltip.js"></script>
+<script type="text/javascript" src="/http/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="/http/js/jquery.corner.js"></script>
+<script type="text/javascript" src="/http/js/modules/common/scripts.js"></script>
+<?=$this->getHelper('Html_Title')->getHtml()?>
+</head><body>
+
+<? include $this->getRealTemplatePath('Common/FrontendTop') ?>
+
+<div id="advert_frontend-add" class="content">
+
+	<? include $this->getRealTemplatePath('Common/FrontendNotification') ?>
+
+	<h2 class="header"><?=$this->getHelper('Html_Title')->getByIndex(1)?></h2>
+
+	<table id="table-structure">
+	    <tr>
+	        <td><h3>Подать объявление без регистрации на сайте</h3></td>
+	        <td><h3>Подать объявление с регистрацией на сайте</h3></td>
+	    </tr>
+	    <tr>
+	        <td>
+	            <ul class="plus">
+	                <li>Быстрая подача объявления &mdash; нет процедуры регистрации.</li>
+	            </ul>
+	            <ul class="minus">
+	                <li>Нет возможности редактировать добавленные объявления, удалять или поднимать их в результатах поиска.</li>
+	                <li>При подаче каждого нового объявления приходится заново заполнять свои контактные данные.</li>
+	            </ul>
+	            <ul class="information">
+	                <li>Данный способ подачи объявления идеально подходит для тех, кто хочет быстро разместить объявление и &laquo;забыть&raquo; о нем.</li>
+	            </ul>
+	        </td>
+	        <td>
+	            <ul class="plus">
+	                <li>Возможность управлять созданными ранее объявлениями, масса функций.</li>
+	                <li>Единый аккаунт пользователя для всех объявлений &mdash; нет необходимости каждый раз заполнять свои контактные данные.</li>
+	            </ul>
+	            <ul class="information">
+	                <li>Данный способ подачи объявления подходит для тех, кто хочет разместить объявление на сайте и иметь  возможность редактировать объявление и контактную информацию, изменять цену, поднимать объявление в результатах поиска, создавать большое количество новых объявлений и, в случае надобности, удалять объявление с сайта.</li>
+	            </ul>
+	        </td>
+	    </tr>
+	    <tr>
+	        <td>
+	            <p class="add_advert"><a href="/my/adverts/edit/">Подать объявление без регистрации</a></p>
+	        </td>
+	        <td>
+	            <p class="add_advert"><a href="/registration.xhtml">Зарегистрироваться и подать объявление</a></p>
+	        </td>
+	    </tr>
+	</table>
+</div>
+
+<? include $this->getRealTemplatePath('Common/FrontendBottom') ?>
+
+</body></html>

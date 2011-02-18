@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=windows-1251" />
+<meta name="keywords" content="<?=($this->category->getKeywords()
+                                   ? strip_tags($this->category->getKeywords())
+                                   : $this->lang['meta']['keywords'])?>" />
+<meta name="description" content="<?=$this->getHelper('Helper_Format')->userDataOutput($this->advert->getHeader())?>. <?=$this->lang['meta']['description']?>" />
+<link rel="stylesheet" href="/http/css/frontend/main.css" type="text/css" />
+<link rel="shortcut icon" sizes="16x16" href="/favicon.ico" />
+<!--[if IE]>
+    <link rel="stylesheet" type="text/css" href="/http/css/frontend/all-ie.css" />
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+<script type="text/javascript" src="/http/js/library/index.js"></script>
+<script type="text/javascript" src="/http/js/library/locations.js"></script>
+<script type="text/javascript" src="/http/js/tooltip.js"></script>
+<script type="text/javascript" src="/http/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="/http/js/jquery.corner.js"></script>
+<script type="text/javascript" src="/http/js/modules/common/scripts.js"></script>
+<?=$this->getHelper('Html_Title')->getHtml()?>
+</head>
+<body>
+
+<? include $this->getRealTemplatePath('Common/FrontendTop') ?>
+
+<div class="content">
+
+<h2 class="header"><a href="/categories/">Категории</a><?=$this->getHelper('Module_Category_Helper_BreadCrumbs', $this->path_to_category, '/categories')->lastElementIsLink(true)->getHtml()?></h2>
+
+<? include $this->getRealTemplatePath('Common/FrontendNotification')?>
+
+<?php if ($this->advert->getActive() or
+          !$this->advert->getActive() && $this->advert->getIdUser() === $this->current_user->getId()): ?>
+
+<div class="advert_cover view_full">
+    <div class="advert_content_outer">
+	    <article class="advert_content">
+	        <div class="advert_text">
+	            <table class="table-structure">
+	                <tr>
+	                    <td colspan="2">
+			                <header>
+			                    <h3 class="advert_header"><?=$this->getHelper('Helper_Format')->userDataOutput($this->advert->getHeader())?></h3>
+			                </header>
+			            </td>
+
+			            <td class="right-col" rowspan="10"><span class="advert_price space_nowrap">
+	                    <?php if (!$this->advert->getPrice()): ?>
+	                        Договорная
+	                    <?php else:?>
+	                        <strong><?=number_format($this->advert->getPrice(),0,"."," ")?></strong> <?=$this->advert->getPriceType()->getAsSymbol()?>
+	                    <?php endif;?>
+	                    </span></td>
+		            </tr>
+
+	                <tr>
+	                    <td class="left-col description_td"><!--noindex-->Категория:<!--/noindex--></td>
+	                    <td><p><a title="Показать все объявления в категории &laquo;<?=$this->category->getName()?>&raquo;" href="/categories<?=$this->category->getUrl()?>"><?=$this->category->getName()?></a></p></td>
+	                </tr>
+
+	                <tr>
+	                    <td class="left-col description_td"><!--noindex-->Тип объявления:<!--/noindex--></td>
+	                    <td><p><a title="Показать все объявления <?=$this->lang->advert_types_form_3->item($this->advert->getType()->getValue())?> в категории &laquo;<?=$this->category->getName()?>&raquo;" href="/categories<?=$this->category->getUrl()?>?type=<?=$this->advert->getType()->getValue()?>"><?=$this->advert->getType()->getAsText()?></a></p></td>
+	                </tr>
+
+	                <tr>
+	                    <td class="left-col description_td"><!--noindex-->Регион:<!--/noindex--></td>
+	                    <td><p>
+	                        <?php if ($this->user_city->getId() || $this->user_region->getId() || $this->user_country->getId()): ?>
+	                                <? if ($this->user_city->getId()): ?><a title="Показать все объявления <?=$this->lang->advert_types_form_3->item($this->advert->getType()->getValue())?> в категории &laquo;<?=$this->category->getName()?>&raquo; в регионе <?=$this->user_city->getNameRu()?>, <?=$this->user_region->getNameRu()?>, <?=$this->user_country->getNameRu()?>" href="/categories<?=$this->category->getUrl()?>?type=<?=$this->advert->getType()->getValue()?>&amp;id_city=<?=$this->user_city->getId()?>&amp;id_region=<?=$this->user_city->getIdRegion()?>&amp;id_country=<?=$this->user_city->getIdCountry()?>"><?=$this->user_city->getNameRu()?></a>,<?php endif; ?>
+	                                <? if ($this->user_region->getId()): ?><a title="Показать все объявления <?=$this->lang->advert_types_form_3->item($this->advert->getType()->getValue())?> в категории &laquo;<?=$this->category->getName()?>&raquo; в регионе <?=$this->user_region->getNameRu()?>, <?=$this->user_country->getNameRu()?>" href="/categories<?=$this->category->getUrl()?>?type=<?=$this->advert->getType()->getValue()?>&amp;id_region=<?=$this->user_region->getId()?>&amp;id_country=<?=$this->user_region->getIdCountry()?>"><?=$this->user_region->getNameRu()?></a>,<?php endif; ?>
+	                                <? if ($this->user_country->getId()): ?><a title="Показать все объявления <?=$this->lang->advert_types_form_3->item($this->advert->getType()->getValue())?> в категории &laquo;<?=$this->category->getName()?>&raquo; в регионе <?=$this->user_country->getNameRu()?>" href="/categories<?=$this->category->getUrl()?>?type=<?=$this->advert->getType()->getValue()?>&amp;id_country=<?=$this->user_country->getId()?>"><?=$this->user_country->getNameRu()?></a><?php endif; ?>
+	                        <?php else: ?>
+	                            не указан
+	                        <?php endif; ?>
+	                    </p></td>
+	                </tr>
+
+		            <tr>
+			            <td class="text" colspan="2">
+			                <p><?=$this->getHelper('Helper_Format')->run($this->advert->getText(), 'strip_tags', 'nl2br', 'hsc', 'entDec', 'bb2html')?></p>
+			            </td>
+		            </tr>
+
+		            <?php if($this->advert->getMainUserName() && $this->user->getFullName()): ?>
+	                <tr>
+	                    <td class="left-col description_td"><!--noindex-->Контактное лицо:<!--/noindex--></td>
+	                    <td><!--noindex--><p><?=$this->getHelper('Helper_Format')->userDataOutput($this->user->getFullName())?></p><!--/noindex--></td>
+	                </tr>
+	                <?php elseif(!$this->advert->getMainUserName() && $this->advert->getUserName()): ?>
+	                <tr>
+	                    <td class="left-col description_td"><!--noindex-->Контактное лицо:<!--/noindex--></td>
+	                    <td><!--noindex--><p><?=$this->getHelper('Helper_Format')->userDataOutput($this->advert->getUserName())?></p><!--/noindex--></td>
+	                </tr>
+	                <?php endif; ?>
+
+	                <?php if($this->advert->getMainPhone() && $this->user->getPhone()): ?>
+	                <tr>
+	                    <td class="left-col description_td"><!--noindex-->Телефон:<!--/noindex--></td>
+	                    <td><!--noindex--><p><span class="imitation_link" onclick="return viewAdvertPhone(this, <?=$this->advert->getId()?>)">Показать</span></p><!--/noindex--></td>
+	                </tr>
+	                <?php elseif(!$this->advert->getMainPhone() && $this->advert->getPhone()): ?>
+	                <tr>
+	                    <td class="left-col description_td"><!--noindex-->Телефон:<!--/noindex--></td>
+	                    <td><!--noindex--><p><span class="imitation_link" onclick="return viewAdvertPhone(this, <?=$this->advert->getId()?>)">Показать</span></p><!--/noindex--></td>
+	                </tr>
+	                <?php endif; ?>
+
+	                <?php if($this->advert->getMainEmail() && $this->user->getMail()->getValue()): ?>
+	                <tr>
+	                    <td class="left-col description_td">Email-адрес:</td>
+	                    <td><!--noindex--><p><span class="imitation_link" onclick="return viewAdvertEmail(this, <?=$this->advert->getId()?>)">Показать</span></p><!--/noindex--></td>
+	                </tr>
+	                <?php elseif(!$this->advert->getMainEmail() && $this->advert->getEmail()): ?>
+	                <tr>
+	                    <td class="left-col description_td"><!--noindex-->Email-адрес:<!--/noindex--></td>
+	                    <td><!--noindex--><p><span class="imitation_link" onclick="return viewAdvertEmail(this, <?=$this->advert->getId()?>)">Показать</span></p><!--/noindex--></td>
+	                </tr>
+	                <?php endif; ?>
+
+	                <?php if($this->advert->getMainUrl() && $this->user->getUrl()): ?>
+	                <tr>
+	                    <td class="left-col description_td"><!--noindex-->Веб-сайт:<!--/noindex--></td>
+	                    <td><!--noindex--><p><span title="<?=Helper_Format::correctHttpUrl($this->user->getUrl())?>" class="imitation_outer_link" onclick="imitationLink(this)"><?=Helper_Format::niceUrlAnchor(Helper_Format::correctHttpUrl($this->user->getUrl()))?></span></p><!--/noindex--></td>
+	                </tr>
+	                <?php elseif(!$this->advert->getMainUrl() && $this->advert->getUrl()): ?>
+	                <tr>
+	                    <td class="left-col description_td"><!--noindex-->Веб-сайт:<!--/noindex--></td>
+	                    <td><!--noindex--><p><span title="<?=Helper_Format::correctHttpUrl($this->advert->getUrl())?>" class="imitation_outer_link" onclick="imitationLink(this)"><?=Helper_Format::niceUrlAnchor(Helper_Format::correctHttpUrl($this->advert->getUrl()))?></span></p><!--/noindex--></td>
+	                </tr>
+	                <?php endif; ?>
+
+	                <?php if($this->advert->getMainIcq() && $this->user->getIcq()): ?>
+	                <tr>
+	                    <td class="left-col description_td"><!--noindex-->ICQ-адрес:<!--/noindex--></td>
+	                    <td><!--noindex--><p><?=$this->user->getIcq()?></p><!--/noindex--></td>
+	                </tr>
+	                <?php elseif(!$this->advert->getMainIcq() && $this->advert->getIcq()): ?>
+	                <tr>
+	                    <td class="left-col description_td"><!--noindex-->ICQ-адрес:<!--/noindex--></td>
+	                    <td><!--noindex--><p><?=$this->advert->getIcq()?></p><!--/noindex--></td>
+	                </tr>
+	                <?php endif; ?>
+	            </table>
+	        </div>
+
+		    <nav>
+		        <ul class="my-adverts--ul-advert-manager">
+		            <?php if (!$this->current_user->isGuest() && $this->current_user->getId() == $this->advert->getIdUser()): ?>
+		            <li class="edit_link"><a class="space_nowrap" title="Редактировать объявление" href="/my/adverts/edit/<?=$this->advert->getId()?>.xhtml?referrer=<?=$this->urlencode_request_uri?>">Редактировать</a></li>
+		            <li class="zoom_link">Посмотреть</li>
+		            <?php if ($this->advert->getExpireRestrictionUpdateCreateDate()->invert): ?>
+		            <li class="up_link"><a title="Поднять объявление в результатах поиска. Данная функция гарантирует, что Ваше объявление увидят больше посетителей сайта <?=$_SERVER['HTTP_HOST']?>. Применять данную опцию можно не чаще чем через один час." href="/my/adverts/up/<?=$this->advert->getId()?>.xhtml?referrer=<?=$this->urlencode_request_uri?>">Поднять</a>
+		            <?php else: ?>
+		            <li class="up_link"><span class="cursor_help space_nowrap" title="Для этого объявления данная функция будет доступна через <?=$this->advert->getExpireRestrictionUpdateCreateDate()->i?> мин.">Поднять</span>
+		            <?php endif;?>
+		            </li>
+		            <?php if ($this->advert->getActive()): ?>
+		            <li class="lock_link"><a class="space_nowrap" title="Приостановить показ объявления на сайте (закрыть доступ для всех)" href="/my/adverts/active/<?=$this->advert->getId()?>.xhtml?referrer=<?=$this->urlencode_request_uri?>">Приостановить показ
+		            <?php else: ?>
+		            <li class="lock-open_link"><a class="space_nowrap" title="Возобновить показ объявления на сайте (открыть доступ для всех)" href="/my/adverts/active/<?=$this->advert->getId()?>.xhtml?referrer=<?=$this->urlencode_request_uri?>">Возобновить показ
+		            <?php endif;?>
+		            </a></li>
+		            <li class="delete_link"><a class="space_nowrap" title="Безвозвратно удалить объявление" onclick="return confirm('Вы действительно хотите удалить объявление &laquo;<?=$this->getHelper('Helper_Format')->run($this->advert->getHeader(), 'entDec', 'confirm')?>&raquo;?')" href="/my/adverts/delete/<?=$this->advert->getId()?>.xhtml">Удалить</a></li>
+		            <?php endif;?>
+		            <li class="advert_date space_nowrap">
+		                <!--noindex-->Размещено:<!--/noindex-->
+		                <time datetime="<?=$this->advert->getCreateDate()->format(DateTime::ATOM)?>" pubdate="pubdate"><?=$this->advert->getCreateDate()->formatDateForPeople()?></time><?php if (!$this->current_user->isGuest() && $this->current_user->getId() == $this->advert->getIdUser()): ?>, <!--noindex-->просмотров: <?=$this->advert->getViewCount()?><!--/noindex--><?php endif;?>
+		            </li>
+		        </ul>
+	        </nav>
+
+		    <div style="clear:both"></div>
+	    </article>
+    </div>
+</div>
+<?php endif;?>
+
+<?php if ($this->similar_adverts && $this->similar_adverts->count()): ?>
+<h3 id="last_adverts_types" class="header">Похожие объявления:</h3>
+
+    <ul id="similar_adverts">
+        <?php foreach ($this->similar_adverts as $advert): ?>
+            <li><a title="<?php
+            $advert_text = Helper_Format::getPreviewStr($advert->getText(), 140, '...');
+            echo $this->getHelper('Helper_Format')->run($advert_text, 'bb2html', 'bb2html2strip', 'strip_tags', 'entDec', 'hsc');?>" href="/categories<?=$this->category->getUrl()?><?=$advert->getId()?>.xhtml"><?=$this->getHelper('Helper_Format')->userDataOutput($advert->getHeader())?></a> <span><?=$advert->getCreateDate()->formatDateForPeople()?></span></li>
+        <?php endforeach; ?>
+    </ul>
+<?php endif; ?>
+
+</div>
+
+<? include $this->getRealTemplatePath('Common/FrontendBottom') ?>
+
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru" dir="ltr">
+<head>
+<?=$this->getHelper('Html_Title')->getHtml()?>
+<meta http-equiv="Content-language" content="ru" />
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1251" />
+<link rel="stylesheet" href="/http/css/backend/main.css" type="text/css" />
+
+</head><body>
+
+<? include $this->getRealTemplatePath('Common/BackendNotification') ?>
+
+<? include $this->getRealTemplatePath('Common/BackendMenu') ?>
+
+<table class="aTable">
+<tr><td><a class="add_element" href="/admin/category/edit/">Добавление категории</a> <span class="vhr">|</span></td></tr>
+</table>
+
+<table class="aTable">
+<? if($this->categories): ?>
+    <colgroup>
+        <col width="5%" />
+        <col width="70%" />
+        <col width="5%" />
+        <col width="5%" />
+        <col width="5%" />
+        <col width="5%" />
+        <col width="5%" />
+    </colgroup>
+    <tr>
+        <th colspan="7"><h4>Список категорий</h4></th>
+    </tr>
+    <tr class="head_params">
+        <td><?=$this->lang->id?></td>
+        <td>Имя категории</td>
+        <td colspan="5"><?=$this->lang->actions?></td>
+    </tr>
+    <?=$this->getHelper('Module_Category_Helper_TreeBackendTable', $this->categories, $this)->getHtml()?>
+<? else: ?>
+    <tr>
+    <th><h4>Список категорий</h4></th>
+    </tr>
+    <tr class="center"><td><?=$this->lang['not_found_request_data']?></td></tr>
+<? endif; ?>
+</table>
+
+</body></html>

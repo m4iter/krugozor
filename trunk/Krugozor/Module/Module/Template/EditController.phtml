@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru" dir="ltr">
+<head>
+<?=$this->getHelper('Html_Title')->getHtml()?>
+<meta http-equiv="Content-language" content="ru" />
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1251" />
+<link rel="stylesheet" href="/http/css/backend/main.css" type="text/css" />
+<script type="text/javascript" src="/http/js/library/index.js"></script>
+</head><body>
+
+<? include $this->getRealTemplatePath('Common/BackendNotification') ?>
+
+<? include $this->getRealTemplatePath('Common/BackendMenu') ?>
+
+<table class="aTable">
+<tr><td><a href="/admin/module/"><?=$this->getHelper('Html_Title')->getByIndex(1)?></a> &raquo;
+<a href="/admin/module/edit/?id=<?=$this->controller->getModule()->getId()?>"><?=$this->getHelper('Helper_Format')->run($this->controller->getModule()->getName())?></a> &raquo;
+
+<? if($this->controller->getId()): ?>
+    <?=$this->lang['editing_controller']?> &laquo;<?=$this->getHelper('Helper_Format')->run($this->controller->getName())?>&raquo;
+<? else: ?>
+    <?=$this->lang['add_controller']?>
+<? endif; ?>
+</td></tr>
+<tr><td><a class="add_element" href="/admin/controller/edit/0/<?=$this->controller->getModule()->getId()?>/"><?=$this->lang['add_controller']?></a> <span class="vhr">|</span></td></tr>
+</table>
+
+<form id="<?=$this->_module_name?>_<?=$this->_controller_name?>" method="post" action="<?=$this->hsc_request_uri?>">
+<table class="aTable">
+    <colgroup>
+        <col width="30%" />
+        <col width="70%" />
+    </colgroup>
+    <tr>
+        <th colspan="2"><h4>
+            <? if($this->controller->getId()): ?>
+                <?=$this->lang['editing_controller']?> &laquo;<?=$this->getHelper('Helper_Format')->run($this->controller->getName())?>&raquo;
+            <? else: ?>
+                <?=$this->lang['add_controller']?>
+            <? endif; ?></h4>
+        </th>
+    </tr>
+    <tr>
+        <td><strong class="compulsory"><?=$this->lang['module']?>:</strong></td>
+        <td><?
+            $select = $this->getHelper('Helper_Form')->inputSelect('controller[id_module]', $this->controller->getIdModule());
+            $select->addOption( $this->getHelper('Helper_Form')->inputOption(0, $this->lang['select_value']) );
+            foreach ($this->modules as $module):
+                $select->addOption( $this->getHelper('Helper_Form')->inputOption($module->getId(), $this->getHelper('Helper_Format')->run($module->getName()) ) );
+            endforeach;
+            echo $select->getHtml();
+            ?>
+            <?=$this->getHelper('Helper_Form')->getFieldError($this->err->id_module)?></td>
+    </tr>
+    <tr>
+        <td><strong class="compulsory">Имя контроллера:</strong></td>
+        <td>
+            <?=$this->getHelper('Helper_Form')->inputText('controller[name]', $this->controller->getName(), array('maxlength'=>255, 'class'=>'textSmall'))->getHtml()?>
+            <?=$this->getHelper('Helper_Form')->getFieldError($this->err->name)?>
+        </td>
+    </tr>
+    <tr>
+        <td><strong class="compulsory">Ключ контроллера:</strong></td>
+        <td>
+            <?=$this->getHelper('Helper_Form')->inputText('controller[key]', $this->controller->getKey(), array('maxlength'=>30, 'class'=>'textSmall'))->getHtml()?>
+            <?=$this->getHelper('Helper_Form')->getFieldError($this->err->key)?>
+        </td>
+    </tr>
+    <tr align="center">
+        <td colspan="2">
+		<?=$this->getHelper('Helper_Form')->inputHidden('controller[id]', $this->controller->getId())->getHtml()?>
+		<?=$this->getHelper('Helper_Form')->inputSubmit('submit', $this->lang['save_changes'])->getHtml()?>&nbsp;&nbsp;&nbsp;
+        <?=$this->getHelper('Helper_Form')->inputFullCheckbox('return_on_page', 1, 0, $this->return_on_page, array('id'=>'label_return_on_page'))?>
+        &nbsp;<?=$this->getHelper('Helper_Form')->Label($this->lang['return_to_this_page'], 'label_return_on_page')->getHtml()?>
+        </td>
+    </tr>
+</table></form>
+</body></html>
