@@ -36,8 +36,6 @@ abstract class Module_Common_Controller_Common extends Base_Controller
                                              Helper_Format::stripNotifQS($_SERVER['REQUEST_URI']);
         $this->getView()->urlencode_full_request_uri = urlencode($this->getView()->full_request_uri);
         $this->getView()->hsc_full_request_uri = Helper_Format::hsc($this->getView()->full_request_uri);
-
-        $this->getView()->path = Base_Registry::getInstance()->path['http'];
     }
 
     /**
@@ -66,13 +64,8 @@ abstract class Module_Common_Controller_Common extends Base_Controller
     {
         $time = time() - 60*60*24*31;
 
-        $this->getResponse()->setcookie('auth_id', '', $time, '/');
-        $this->getResponse()->setcookie('auth_hash', '', $time, '/');
-
-        return $this->createNotification()
-                    ->setHidden(1)
-                    ->setRedirectUrl($_SERVER['REQUEST_URI'])
-                    ->run();
+        $this->getResponse()->setCookie('auth_id', '', $time, '/');
+        $this->getResponse()->setCookie('auth_hash', '', $time, '/');
     }
 
     /**
@@ -146,27 +139,25 @@ abstract class Module_Common_Controller_Common extends Base_Controller
         if (!empty($this->getRequest()->getCookie()->auth_id) &&
             !empty($this->getRequest()->getCookie()->auth_hash))
         {
-            $this->current_user = $this->getMapper('User/User')->findByLoginHash(
-                $this->getRequest()->getCookie('auth_id'),
-                $this->getRequest()->getCookie('auth_hash'),
-                Base_Registry::getInstance()->config['user_cookie_salt']
+            $this->current_user = $this->getMapper('User/User')->findById(
+                $this->getRequest()->getCookie('auth_id')
             );
 
-            // ≈сли у пользовател€ невалидные cookie, убиваем их.
-            if (!is_object($this->current_user) || $this->current_user->getId() == 0)
-            {
-                $this->destroyCurrentUser();
-            }
-            else
+            if (is_object($this->current_user) &&
+                md5($this->current_user->getLogin() . $this->current_user->getPassword())
+                === $this->getRequest()->getCookie('auth_hash')
+               )
             {
                 $this->getMapper('User/User')->updateActualInfo($this->current_user);
 
-                $this->current_user->setPassword(null);
+                return;
+            }
+            else
+            {
+                $this->destroyCurrentUser();
             }
         }
-        else
-        {
-            $this->current_user = $this->getMapper('User/User')->findById(-1);
-        }
+
+        $this->current_user = $this->getMapper('User/User')->findById(-1);
     }
 }

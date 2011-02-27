@@ -11,13 +11,13 @@ class Module_Advert_Controller_View extends Module_Common_Controller_Common
 
         if (!$advert_data['advert']->getId())
         {
-            $redirect = new Base_Redirect($this->getDb());
-            $redirect->setType('alert');
-            $redirect->setMessage('advert_does_not_exist');
-            $redirect->setRedirectUrl($this->getCurrentUser()->isGuest()
+            return $this->createNotification()
+                        ->setType('alert')
+                        ->setMessage('advert_does_not_exist')
+                        ->setRedirectUrl($this->getCurrentUser()->isGuest()
                                       ? array('categories')
-                                      : array('my', 'adverts'));
-            return $redirect->run();
+                                      : array('my', 'adverts'))
+                        ->run();
         }
 
         foreach ($advert_data as $key => $object)
@@ -46,7 +46,7 @@ class Module_Advert_Controller_View extends Module_Common_Controller_Common
         // Если пользователь скрыл объявление, то уведомляем об этом
         if (!$this->getView()->advert->getActive())
         {
-            $redirect = new Base_Redirect($this->getDb());
+            $redirect = $this->createNotification();
             $redirect->setType('warning');
 
             if ($this->getView()->advert->getIdUser() == $this->getCurrentUser()->getId())

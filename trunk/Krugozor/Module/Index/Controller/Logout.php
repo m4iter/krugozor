@@ -5,15 +5,15 @@ class Module_Index_Controller_Logout extends Module_Common_Controller_Common
     {
         parent::common();
 
-        if ($this->getCurrentUser())
+        if (!$this->getCurrentUser()->isGuest())
         {
             $this->destroyCurrentUser();
         }
 
-        $redirect = new Base_Redirect($this->getDb());
-        $redirect->setHeader('action_complete');
-        $redirect->setMessage('outside_system');
-        $redirect->setRedirectUrl($this->getRequest()->getRequest('referer') ?: '/');
-        return $redirect->run();
+        return $this->createNotification()
+                    ->setHeader('action_complete')
+                    ->setMessage('outside_system')
+                    ->setRedirectUrl($this->getRequest()->getRequest('referer') ?: '/')
+                    ->run();
     }
 }

@@ -1,4 +1,9 @@
 <?php
+/**
+ * Данный контроллер по историческим причинам используется и frontend и backend
+ * частью системы.
+ * @todo: разбить данный контроллер на два независимых после создания сервиса авторизации.
+ */
 class Module_Index_Controller_Login extends Module_Common_Controller_Common
 {
     public function run()
@@ -27,11 +32,11 @@ class Module_Index_Controller_Login extends Module_Common_Controller_Common
                              : 'BackendGeneral';
 
         $index_lang_file = $this->getRequest()->getRequest()->isFrontend()
-                             ? 'FrontendLogin'
-                             : 'BackendLogin';
+                           ? 'FrontendLogin'
+                           : 'BackendLogin';
 
-        $this->getView()->loadI18n('common/'.$general_lang_file,
-                                   'index/'.$index_lang_file);
+        $this->getView()->loadI18n('common/' . $general_lang_file,
+                                   'index/' . $index_lang_file);
 
         $this->getView()->getHelper('Html_Title')->add($this->getView()->lang['title']);
 
@@ -39,17 +44,15 @@ class Module_Index_Controller_Login extends Module_Common_Controller_Common
 
         if (Http_Request::isPost())
         {
-            $user = $this->getMapper('User/User')->createFromCover(
-                $this->getRequest()->getRequest('user'),  array('login', 'password')
+            $user = $this->getMapper('User/User')->createFromCover
+            (
+                $this->getRequest()->getRequest('user'), array('login', 'password')
             );
 
             $validator = new Validator_Chain('common/general', 'index/login');
-
-            $validator->addModelErrors($user->getValidateErrors());
-
-            $validator->add('password', new Module_Common_Validator_EmptyNull($user->getPassword()));
-
-            $validator->validate();
+            $validator->addModelErrors($user->getValidateErrors())
+                      ->add('password', new Module_Common_Validator_EmptyNull($user->getPassword()))
+                      ->validate();
 
             if (!$this->getView()->err = $validator->getErrors())
             {
@@ -57,25 +60,17 @@ class Module_Index_Controller_Login extends Module_Common_Controller_Common
                     $user->getLogin(), $this->getRequest()->getRequest('user')->password
                 );
 
-                $user->setPassword($this->getRequest()->getRequest('user')->password);
-
                 if ($user->getId() > 0)
                 {
                     $time = 0;
 
-                    if ($this->getRequest()->getPost('autologin', 'decimal') &&
-                        $days = $this->getRequest()->getPost('ml_autologin', 'decimal'))
+                    if ($days = $this->getRequest()->getPost('ml_autologin', 'decimal'))
                     {
-                        $time = time()+60*60*24*$days;
+                        $time = time() + 60 * 60 * 24 * $days;
                     }
 
                     $this->getResponse()->setcookie('auth_id', $user->getId(), $time, '/');
-                    $this->getResponse()->setcookie('auth_hash', md5(
-                        $user->getLogin() .
-                        $user->getPassword() .
-                        Base_Registry::getInstance()->config['user_cookie_salt']),
-                        $time, '/'
-                    );
+                    $this->getResponse()->setcookie('auth_hash', md5($user->getLogin() . $user->getPassword()), $time, '/');
 
                     if ($this->getRequest()->getRequest()->isFrontend())
                     {
@@ -88,10 +83,10 @@ class Module_Index_Controller_Login extends Module_Common_Controller_Common
 	                               : '/admin/';
                     }
 
-                    $redirect = new Base_Redirect($this->getDb());
-                    $redirect->setMessage('inside_system');
-                    $redirect->setRedirectUrl($referer);
-                    return $redirect->run();
+                    return $this->createNotification()
+                                ->setMessage('inside_system')
+                                ->setRedirectUrl($referer)
+                                ->run();
                 }
                 else
                 {
@@ -101,10 +96,10 @@ class Module_Index_Controller_Login extends Module_Common_Controller_Common
 
                     if ($this->getRequest()->getRequest()->isFrontend())
                     {
-                        $redirect = new Base_Redirect($this->getDb());
-                        $redirect->setType('alert');
-                        $redirect->setHeader('action_failed');
-                        $redirect->setMessage('post_errors');
+                        $redirect = $this->createNotification()
+                                         ->setType('alert')
+                                         ->setHeader('action_failed')
+                                         ->setMessage('post_errors');
                         $this->getView()->setRedirect($redirect);
                     }
                 }

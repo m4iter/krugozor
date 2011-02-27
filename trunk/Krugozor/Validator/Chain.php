@@ -157,7 +157,7 @@ final class Validator_Chain
      * @access public
      * @param string $key ключ валидатора, соответствующий имени проверяемого поля
      * @param object $rule конкретный валидатор
-     * @return void
+     * @return Validator_Chain
      */
     public function add($key, $rule)
     {
@@ -169,6 +169,8 @@ final class Validator_Chain
         {
             $this->list[$key] = array($rule);
         }
+
+        return $this;
     }
 
     /**

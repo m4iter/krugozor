@@ -8,11 +8,11 @@ class Module_Index_Controller_BackendInto extends Module_Common_Controller_Commo
 
         if (!$this->checkAccess())
         {
-            $redirect = new Base_Redirect($this->getDb());
-            $redirect->setMessage('forbidden_access');
-            $redirect->setType('alert');
-            $redirect->setRedirectUrl(Base_Redirect::implode('admin'));
-            return $redirect->run();
+            return $this->createNotification()
+                        ->setMessage('forbidden_access')
+                        ->setType('alert')
+                        ->setRedirectUrl(Base_Redirect::implode('admin'))
+                        ->run();
         }
 
         $this->getView()->loadI18n('Common/BackendGeneral', $this->getVirtualControllerPath());

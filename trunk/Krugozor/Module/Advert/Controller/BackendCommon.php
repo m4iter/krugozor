@@ -9,11 +9,11 @@ abstract class Module_Advert_Controller_BackendCommon extends Module_Common_Cont
         {
             if (!Base_Numeric::is_decimal($id))
             {
-                $redirect = new Base_Redirect($this->getDb());
-                $redirect->setType('alert');
-                $redirect->setMessage('bad_id_element');
-                $redirect->setRedirectUrl(array('admin', 'advert'));
-                return $redirect->run();
+                return $this->createNotification()
+                            ->setType('alert')
+                            ->setMessage('bad_id_element')
+                            ->setRedirectUrl(array('admin', 'advert'))
+                            ->run();
             }
 
             $this->advert = $this->getMapper('Advert/Advert')->findById(
@@ -22,11 +22,11 @@ abstract class Module_Advert_Controller_BackendCommon extends Module_Common_Cont
 
             if (!$this->advert->getId())
             {
-                $redirect = new Base_Redirect($this->getDb());
-                $redirect->setType('alert');
-                $redirect->setMessage('element_does_not_exist');
-                $redirect->setRedirectUrl(array('admin', 'advert'));
-                return $redirect->run();
+                return $this->createNotification()
+                            ->setType('alert')
+                            ->setMessage('element_does_not_exist')
+                            ->setRedirectUrl(array('admin', 'advert'))
+                            ->run();
             }
         }
     }

@@ -9,11 +9,11 @@ class Module_Advert_Controller_BackendEdit extends Module_Advert_Controller_Back
 
         if (!$this->checkAccess())
         {
-            $redirect = new Base_Redirect($this->getDb());
-            $redirect->setMessage('forbidden_access');
-            $redirect->setType('alert');
-            $redirect->setRedirectUrl(array('admin', 'advert'));
-            return $redirect->run();
+            return $this->createNotification()
+                        ->setMessage('forbidden_access')
+                        ->setType('alert')
+                        ->setRedirectUrl(array('admin', 'advert'))
+                        ->run();
         }
 
         $this->init();
@@ -76,12 +76,12 @@ class Module_Advert_Controller_BackendEdit extends Module_Advert_Controller_Back
 
         $validator->validate();
 
-        $redirect = new Base_Redirect($this->getDb());
+        $redirect = $this->createNotification();
 
         if ($this->getView()->err = $validator->getErrors())
         {
-            $redirect->setType('alert');
-            $redirect->setMessage('post_errors');
+            $redirect->setType('alert')
+                     ->setMessage('post_errors');
             $this->getView()->setRedirect($redirect);
         }
         else
@@ -97,18 +97,17 @@ class Module_Advert_Controller_BackendEdit extends Module_Advert_Controller_Back
                 $this->advert->getCategory()
             );
 
-            $redirect->setHeader('action_complete');
-            $redirect->setMessage('element_edit_ok');
-            $redirect->setRedirectUrl($this->getRequest()->getRequest('return_on_page')
+            return $redirect->setHeader('action_complete')
+                            ->setMessage('element_edit_ok')
+                            ->setRedirectUrl($this->getRequest()->getRequest('return_on_page')
                                       ? Base_Redirect::implode('admin', 'advert', 'edit') .
-                                        '?id='.$this->advert->getId()
+                                        '?id=' . $this->advert->getId()
                                       : (
                                             $this->getRequest()->getRequest('referer')
                                             ?: Base_Redirect::implode('admin', 'advert')
                                         )
-                                     );
-            $this->getView()->setRedirect($redirect);
-            return $redirect->run();
+                                     )
+                            ->run();
         }
     }
 }

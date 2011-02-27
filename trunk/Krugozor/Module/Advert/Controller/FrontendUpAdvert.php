@@ -12,16 +12,16 @@ class Module_Advert_Controller_FrontendUpAdvert extends Module_Advert_Controller
 
         if (!$this->checkAccess() || $this->getCurrentUser()->getId() !== $this->advert->getIdUser())
         {
-            $redirect = new Base_Redirect($this->getDb());
-            $redirect->setMessage('forbidden_access');
-            $redirect->setType('alert');
-            $redirect->setRedirectUrl($this->getRequest()->getRequest('referrer')
-                                      ? $this->getRequest()->getRequest('referrer')
-                                      : array('my'));
-            return $redirect->run();
+            return $this->createNotification()
+                        ->setMessage('forbidden_access')
+                        ->setType('alert')
+                        ->setRedirectUrl($this->getRequest()->getRequest('referrer')
+                                         ? $this->getRequest()->getRequest('referrer')
+                                         : array('my'))
+                        ->run();
         }
 
-        $redirect = new Base_Redirect($this->getDb());
+        $redirect = $this->createNotification();
         $redirect->addParam('advert_header', Helper_Format::hsc($this->advert->getHeader()));
 
         if ($this->getMapper('Advert/Advert')->updateDateCreate($this->advert))

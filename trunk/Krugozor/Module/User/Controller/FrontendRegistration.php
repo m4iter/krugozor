@@ -9,10 +9,10 @@ class Module_User_Controller_FrontendRegistration extends Module_Common_Controll
 
         if (!$this->getCurrentUser()->isGuest())
         {
-            $redirect = new Base_Redirect($this->getDb());
-            $redirect->setHidden(1);
-            $redirect->setRedirectUrl('/my/');
-            return $redirect->run();
+            return $this->createNotification()
+                        ->setHidden(1)
+                        ->setRedirectUrl('/my/')
+                        ->run();
         }
 
         $this->getView()->session_name = Base_Session::getInstance('CAPTCHASID')->getName();
@@ -82,10 +82,10 @@ class Module_User_Controller_FrontendRegistration extends Module_Common_Controll
 
         if ($this->getView()->err = $validator->getErrors())
         {
-            $redirect = new Base_Redirect($this->getDb());
-            $redirect->setType('alert');
-            $redirect->setHeader('action_failed');
-            $redirect->setMessage('post_errors');
+            $redirect = $this->createNotification()
+                             ->setType('alert')
+                             ->setHeader('action_failed')
+                             ->setMessage('post_errors');
             $this->getView()->setRedirect($redirect);
 
             $this->getView()->password_1 = $this->getRequest()->getRequest('user')->item('password_1');
@@ -99,9 +99,9 @@ class Module_User_Controller_FrontendRegistration extends Module_Common_Controll
                 $validator->addError('system_error', 'SYSTEM_ERROR');
                 $this->getView()->err = $validator->getErrors();
 
-                $redirect = new Base_Redirect($this->getDb());
-                $redirect->setType('alert');
-                $redirect->setMessage('unknown_error');
+                $redirect = $this->createNotification()
+                                 ->setType('alert')
+                                 ->setMessage('unknown_error');
                 $this->getView()->setRedirect($redirect);
 
                 return false;
@@ -139,39 +139,35 @@ class Module_User_Controller_FrontendRegistration extends Module_Common_Controll
             $user = $this->getMapper('User/User')->findByLoginPassword(
                 $this->user->getLogin(), $this->getRequest()->getRequest('user')->password_1
             );
-            $user->setPassword($this->getRequest()->getRequest('user')->password_1);
 
             if ($user->getId() > 0)
             {
                 $time = time()+60*60*24*360;
                 $this->getResponse()->setcookie('auth_id', $user->getId(), $time, '/');
                 $this->getResponse()->setcookie('auth_hash',
-	                                            md5($user->getLogin().
-	                                                $user->getPassword().
-	                                                Base_Registry::getInstance()->config->user_cookie_salt),
+	                                            md5($user->getLogin() . $user->getPassword()),
 	                                            $time,
 	                                            '/');
                 $this->getResponse()->sendCookie();
 
-                $redirect = new Base_Redirect($this->getDb());
-                $redirect->setHeader('you_registration_ok');
-                $redirect->setMessage($this->user->getMail()->getValue()
-                                      ? 'you_registration_with_email'
-                                      : 'you_registration_without_email'
-                                     );
-                $redirect->addParam('login', $user->getLogin());
-                $redirect->addParam('password', $this->getRequest()->getRequest()->user->password_1);
-                $redirect->setRedirectUrl('/my/adverts/edit/?from_registration=1');
-                return $redirect->run();
+                return $this->createNotification()
+                            ->setHeader('you_registration_ok')
+                            ->setMessage($this->user->getMail()->getValue()
+                                         ? 'you_registration_with_email'
+                                         : 'you_registration_without_email'
+                                        )
+                            ->addParam('login', $user->getLogin())
+                            ->addParam('password', $this->getRequest()->getRequest('user')->password_1)
+                            ->setRedirectUrl('/my/adverts/edit/?from_registration=1');
             }
 
             // пользователь  не вставился
-            $redirect = new Base_Redirect($this->getDb());
-            $redirect->setType('alert');
-            $redirect->setHeader('action_failed');
-            $redirect->setMessage('unknown_error');
-            $redirect->setRedirectUrl($this->getRequest()->getRequest()->getUri());
-            return $redirect->run();
+            return $this->createNotification()
+                        ->setType('alert')
+                        ->setHeader('action_failed')
+                        ->setMessage('unknown_error')
+                        ->setRedirectUrl($this->getRequest()->getRequest()->getUri())
+                        ->run();
         }
     }
 }

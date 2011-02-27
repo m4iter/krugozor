@@ -9,12 +9,12 @@ class Module_Advert_Controller_FrontendCategoryList extends Module_Advert_Contro
 
         if (!$category->getId())
         {
-            $redirect = new Base_Redirect($this->getDb());
-            $redirect->setHeader('action_failed');
-            $redirect->setType('alert');
-            $redirect->setMessage('element_does_not_exist');
-            $redirect->setRedirectUrl('/categories/');
-            return $redirect->run();
+            return $this->createNotification()
+                        ->setHeader('action_failed')
+                        ->setType('alert')
+                        ->setMessage('element_does_not_exist')
+                        ->setRedirectUrl('/categories/')
+                        ->run();
         }
 
         $this->init();
@@ -80,10 +80,11 @@ class Module_Advert_Controller_FrontendCategoryList extends Module_Advert_Contro
             }
 
             $this->getResponse()->sendCookie();
-            $redirect = new Base_Redirect($this->getDb());
-            $redirect->setMessage('filter_action');
-            $redirect->setRedirectUrl($this->getRequest()->getRequest()->getUri());
-            return $redirect->run();
+
+            return $this->createNotification()
+                        ->setMessage('filter_action')
+                        ->setRedirectUrl($this->getRequest()->getRequest()->getUri())
+                        ->run();
         }
 
         $get_search = ($this->getRequest()->getGet('id_city', 'decimal')

@@ -5,7 +5,7 @@ abstract class Module_Ajax_Controller_Common extends Module_Common_Controller_Co
     {
         $this->default_view_class_name = 'Module_Ajax_View_Default';
 
-        $this->view_bebug_info = FALSE;
+        $this->enabled_debug_info = FALSE;
 
         $this->getResponse()->clearHeaders();
 

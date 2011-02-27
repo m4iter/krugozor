@@ -7,11 +7,11 @@ class Module_User_Controller_BackendEdit extends Module_User_Controller_BackendC
 
         if (!$this->checkAccess())
         {
-            $redirect = new Base_Redirect($this->getDb());
-            $redirect->setMessage('forbidden_access');
-            $redirect->setType('alert');
-            $redirect->setRedirectUrl(array('admin', 'user'));
-            return $redirect->run();
+            return $this->createNotification()
+                        ->setMessage('forbidden_access')
+                        ->setType('alert')
+                        ->setRedirectUrl(array('admin', 'user'))
+                        ->run();
         }
 
         if ($result = $this->checkIdOnValid())
@@ -99,9 +99,9 @@ class Module_User_Controller_BackendEdit extends Module_User_Controller_BackendC
 
         if ($this->getView()->err = $validator->getErrors())
         {
-            $redirect = new Base_Redirect($this->getDb());
-            $redirect->setType('alert');
-            $redirect->setMessage('post_errors');
+            $redirect = $this->createNotification()
+                             ->setType('alert')
+                             ->setMessage('post_errors');
             $this->getView()->setRedirect($redirect);
 
             $this->getView()->password_1 = $this->getRequest()->getRequest('user')->password_1;
@@ -117,19 +117,19 @@ class Module_User_Controller_BackendEdit extends Module_User_Controller_BackendC
 
             $this->getMapper('User/User')->save($this->user);
 
-            $redirect = new Base_Redirect($this->getDb());
-            $redirect->setMessage('user_edit_ok');
-            $redirect->addParam('user_name', Helper_Format::hsc( $this->user->getFullName() ));
-            $redirect->addParam('id_user', $this->user->getId());
-            $redirect->setRedirectUrl($this->getRequest()->getRequest('return_on_page')
-                                      ? Base_Redirect::implode('admin', 'user', 'edit').'?id='.$this->user->getId()
-                                      : (
-                                            $this->getRequest()->getRequest('referer')
-                                            ? $this->getRequest()->getRequest('referer')
-                                            : array('admin', 'user')
-                                        )
-                                     );
-            return $redirect->run();
+            return $this->createNotification()
+                        ->setMessage('user_edit_ok')
+                        ->addParam('user_name', Helper_Format::hsc($this->user->getFullName()))
+                        ->addParam('id_user', $this->user->getId())
+                        ->setRedirectUrl($this->getRequest()->getRequest('return_on_page')
+	                                      ? Base_Redirect::implode('admin', 'user', 'edit') . '?id=' . $this->user->getId()
+	                                      : (
+	                                            $this->getRequest()->getRequest('referer')
+	                                            ? $this->getRequest()->getRequest('referer')
+	                                            : array('admin', 'user')
+	                                        )
+	                                    )
+                        ->run();
         }
 
         return false;

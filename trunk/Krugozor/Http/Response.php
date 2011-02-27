@@ -139,6 +139,8 @@ class Http_Response
             call_user_func_array('setcookie', $args);
         }
 
+        $this->cookies = array();
+
         return $this;
     }
 

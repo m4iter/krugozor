@@ -83,9 +83,6 @@ else
 
 $Base_Registry = Base_Registry::getInstance();
 
-// Соль, применяемая при хэшировании пароля для COOKIE.
-$Base_Registry['config']['user_cookie_salt'] = '4357435felwfew455km';
-
 // Язык по умолчанию. Применяется для выбора i18n и т.д.
 $Base_Registry['config']['lang'] = 'ru';
 

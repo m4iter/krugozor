@@ -7,11 +7,11 @@ class Module_Advert_Controller_BackendMain extends Module_Advert_Controller_Back
 
         if (!$this->checkAccess())
         {
-            $redirect = new Base_Redirect($this->getDb());
-            $redirect->setMessage('forbidden_access');
-            $redirect->setType('alert');
-            $redirect->setRedirectUrl('/admin/');
-            return $redirect->run();
+            return $this->createNotification()
+                        ->setMessage('forbidden_access')
+                        ->setType('alert')
+                        ->setRedirectUrl('/admin/')
+                        ->run();
         }
 
         $this->init();
@@ -38,13 +38,15 @@ class Module_Advert_Controller_BackendMain extends Module_Advert_Controller_Back
 
         $sql_where_string = $sql_where_args = array();
 
-        if ($this->getRequest()->getRequest('id_category') && Base_Numeric::is_decimal($this->getRequest()->getRequest('id_category')))
+        if ($this->getRequest()->getRequest('id_category') &&
+            Base_Numeric::is_decimal($this->getRequest()->getRequest('id_category')))
         {
             $sql_where_string[] = '`advert`.`advert_category` = ?i';
             $sql_where_args[] = $this->getRequest()->getRequest('id_category');
         }
 
-        if ($this->getRequest()->getRequest('id_user') && Base_Numeric::is_decimal($this->getRequest()->getRequest('id_user')))
+        if ($this->getRequest()->getRequest('id_user') &&
+            Base_Numeric::is_decimal($this->getRequest()->getRequest('id_user')))
         {
             $sql_where_string[] = '`advert`.`advert_id_user` = ?i';
             $sql_where_args[] = $this->getRequest()->getRequest('id_user');
@@ -77,4 +79,3 @@ class Module_Advert_Controller_BackendMain extends Module_Advert_Controller_Back
         return $this->getView();
     }
 }
-?>

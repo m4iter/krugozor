@@ -7,11 +7,11 @@ class Module_User_Controller_BackendMain extends Module_User_Controller_BackendC
 
         if (!$this->checkAccess())
         {
-            $redirect = new Base_Redirect($this->getDb());
-            $redirect->setMessage('forbidden_access');
-            $redirect->setType('alert');
-            $redirect->setRedirectUrl(array('admin'));
-            return $redirect->run();
+            return $this->createNotification()
+                        ->setMessage('forbidden_access')
+                        ->setType('alert')
+                        ->setRedirectUrl(array('admin'))
+                        ->run();
         }
 
         $this->init();
@@ -25,8 +25,8 @@ class Module_User_Controller_BackendMain extends Module_User_Controller_BackendC
         $this->getView()->field_name = $this->getRequest()->getRequest('field_name');
         $this->getView()->sort_order = $this->getRequest()->getRequest('sort_order');
 
-        $this->getView()->search      = $this->getRequest()->getRequest('search');
-        $this->getView()->col         = $this->getRequest()->getRequest('col');
+        $this->getView()->search = $this->getRequest()->getRequest('search');
+        $this->getView()->col = $this->getRequest()->getRequest('col');
         $this->getView()->user_active = $this->getRequest()->getRequest('user_active');
         $this->getView()->user_country = $this->getRequest()->getRequest('user_country');
         $this->getView()->user_region = $this->getRequest()->getRequest('user_region');
@@ -35,4 +35,3 @@ class Module_User_Controller_BackendMain extends Module_User_Controller_BackendC
         return $this->getView();
     }
 }
-?>

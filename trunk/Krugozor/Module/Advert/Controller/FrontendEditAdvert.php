@@ -7,11 +7,11 @@ class Module_Advert_Controller_FrontendEditAdvert extends Module_Advert_Controll
 
         if (!$this->checkAccess())
         {
-            $redirect = new Base_Redirect($this->getDb());
-            $redirect->setMessage('forbidden_access');
-            $redirect->setType('alert');
-            $redirect->setRedirectUrl($this->getRequest()->getRequest('referrer') ?: array('my'));
-            return $redirect->run();
+            return $this->createNotification()
+                        ->setMessage('forbidden_access')
+                        ->setType('alert')
+                        ->setRedirectUrl($this->getRequest()->getRequest('referrer') ?: array('my'))
+                        ->run();
         }
 
         if ($result = $this->checkIdOnValid())
@@ -33,11 +33,11 @@ class Module_Advert_Controller_FrontendEditAdvert extends Module_Advert_Controll
             )
            )
         {
-            $redirect = new Base_Redirect($this->getDb());
-            $redirect->setMessage('forbidden_access');
-            $redirect->setType('alert');
-            $redirect->setRedirectUrl('/my/');
-            return $redirect->run();
+            return $this->createNotification()
+                        ->setMessage('forbidden_access')
+                        ->setType('alert')
+                        ->setRedirectUrl('/my/')
+                        ->run();
         }
 
         if ($this->getCurrentUser()->isGuest() && 0)
@@ -98,9 +98,9 @@ class Module_Advert_Controller_FrontendEditAdvert extends Module_Advert_Controll
 
         if ($this->getView()->err = $validator->getErrors())
         {
-            $redirect = new Base_Redirect($this->getDb());
-            $redirect->setType('alert');
-            $redirect->setMessage('post_errors');
+            $redirect = $this->createNotification()
+                             ->setType('alert')
+                             ->setMessage('post_errors');
             $this->getView()->setRedirect($redirect);
         }
         else
@@ -126,18 +126,17 @@ class Module_Advert_Controller_FrontendEditAdvert extends Module_Advert_Controll
 
             $category = $this->getMapper('Category/Category')->findById($this->advert->getCategory());
 
-            $redirect = new Base_Redirect($this->getDb());
-            $redirect->setHeader('action_complete');
-            $redirect->setMessage('advert_save_ok');
-            $redirect->addParam('id', $this->advert->getId());
-            $redirect->addParam('category_url', $category->getUrl());
-            $redirect->addParam('advert_header', Helper_Format::hsc($this->advert->getHeader()));
-            $redirect->setRedirectUrl($this->getCurrentUser()->isGuest()
-                                      ? '/add.xhtml'
-                                      : ($this->getRequest()->getRequest('referrer', 'string') ?: '/my/adverts/'));
-            $this->getView()->setRedirect($redirect);
+            return $this->createNotification()
+                        ->setHeader('action_complete')
+                        ->setMessage('advert_save_ok')
+                        ->addParam('id', $this->advert->getId())
+                        ->addParam('category_url', $category->getUrl())
+                        ->addParam('advert_header', Helper_Format::hsc($this->advert->getHeader()))
+                        ->setRedirectUrl($this->getCurrentUser()->isGuest()
+                                         ? '/add.xhtml'
+                                         : ($this->getRequest()->getRequest('referrer', 'string') ?: '/my/adverts/'))
 
-            return $redirect->run();
+                        ->run();
         }
     }
 }

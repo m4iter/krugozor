@@ -24,11 +24,15 @@ abstract class Base_Controller
     protected static $template_file_exts = array('.phtml', '.mail');
 
     /**
-     * Вывод отладочной информации
+     * Разрешено ли выводить отладочную информацию.
+     * Данная опция является "решающей" - она перекрывает значение аналогичной опции
+     * в Base_Application. Опция предназначена для случаев, когда вывод отладочной информации
+     * недопустим даже в тестовых целях, например, при ответе на ajax-запрос. Для изменения
+     * опции её нужно перекрыть в конкретном классе-контроллере.
      *
      * @var bool
      */
-    protected $view_bebug_info = true;
+    protected $enabled_debug_info = true;
 
     /**
      * Звёздный объект-хранилище, содержащий все основные объекты системы.
@@ -120,11 +124,11 @@ abstract class Base_Controller
      * @return Db_Mysql_Base
      * @todo: после того, как разберемся с Base_Access - удалить этот метод?
      *        -да, если он больше нигде не понадобится
-     */
+
     protected function getDb()
     {
         return $this->context->getDb();
-    }
+    }*/
 
     /**
      * Создает новый объект системного уведомления.
@@ -260,7 +264,7 @@ abstract class Base_Controller
      */
     public function getDebugInformation()
     {
-        if (!$this->view_bebug_info)
+        if (!$this->enabled_debug_info)
         {
             return;
         }

@@ -12,20 +12,19 @@ class Module_Advert_Controller_FrontendActiveAdvert extends Module_Advert_Contro
 
         if (!$this->checkAccess() || $this->getCurrentUser()->getId() !== $this->advert->getIdUser())
         {
-            $redirect = new Base_Redirect($this->getDb());
-            $redirect->setMessage('forbidden_access');
-            $redirect->setType('alert');
-            $redirect->setRedirectUrl($this->getRequest()->getRequest('referrer') ?: '/my/');
-            return $redirect->run();
+            return $this->createNotification()
+                        ->setMessage('forbidden_access')
+                        ->setType('alert')
+                        ->setRedirectUrl($this->getRequest()->getRequest('referrer') ?: '/my/')
+                        ->run();
         }
 
         $this->getMapper('Advert/Advert')->save($this->advert->invertActive());
 
-        $redirect = new Base_Redirect($this->getDb());
-        $redirect->addParam('advert_header', Helper_Format::hsc($this->advert->getHeader()));
-        $redirect->setMessage('advert_active_' . (string) $this->advert->getActive());
-        $redirect->setRedirectUrl($this->getRequest()->getRequest('referrer') ?: '/my/adverts/');
-
-        return $redirect->run();
+        return $this->createNotification()
+                    ->addParam('advert_header', Helper_Format::hsc($this->advert->getHeader()))
+                    ->setMessage('advert_active_' . (string) $this->advert->getActive())
+                    ->setRedirectUrl($this->getRequest()->getRequest('referrer') ?: '/my/adverts/')
+                    ->run();
     }
 }

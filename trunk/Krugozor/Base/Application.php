@@ -82,7 +82,7 @@ class Base_Application
      */
     public function enabledDebugInfo($enabled)
     {
-        $this->enabled_debug_info = $enabled;
+        $this->enabled_debug_info = (bool)$enabled;
 
         return $this;
     }
@@ -113,7 +113,8 @@ class Base_Application
             }
         }
 
-        $controller_name = $this->getControllerClassName(
+        $controller_name = $this->getControllerClassName
+        (
             $this->context->getRequest()->getRequest()->getModuleName()->getCamelCaseStyle(),
             $this->context->getRequest()->getRequest()->getControllerName()->getCamelCaseStyle()
         );
@@ -145,7 +146,8 @@ class Base_Application
 
             $result->run();
 
-            $this->context->getResponse()->sendHeaders();
+            $this->context->getResponse()->sendCookie()
+                                         ->sendHeaders();
             echo $result->getOut();
 
             if ($this->enabled_debug_info || isset($this->context->getRequest()->getRequest()->aaa))
@@ -282,6 +284,6 @@ class Base_Application
      */
     private function getControllerClassName($module, $controller)
     {
-        return 'Module_'.ucfirst($module).'_Controller_'.ucfirst($controller);
+        return 'Module_' . ucfirst($module) . '_Controller_' . ucfirst($controller);
     }
 }

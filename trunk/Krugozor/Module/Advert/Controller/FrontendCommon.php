@@ -9,22 +9,22 @@ abstract class Module_Advert_Controller_FrontendCommon extends Module_Common_Con
         {
             if (!Base_Numeric::is_decimal($id))
             {
-                $redirect = new Base_Redirect($this->getDb());
-                $redirect->setType('alert');
-                $redirect->setMessage('bad_id_advert');
-                $redirect->setRedirectUrl(array('my', 'adverts'));
-                return $redirect->run();
+                return $this->createNotification()
+                            ->setType('alert')
+                            ->setMessage('bad_id_advert')
+                            ->setRedirectUrl(array('my', 'adverts'))
+                            ->run();
             }
 
             $this->advert = $this->getMapper('Advert/Advert')->findById($this->getRequest()->getRequest('id'));
 
             if (!$this->advert->getId())
             {
-                $redirect = new Base_Redirect($this->getDb());
-                $redirect->setType('alert');
-                $redirect->setMessage('advert_does_not_exist');
-                $redirect->setRedirectUrl(array('my', 'adverts'));
-                return $redirect->run();
+                return $this->createNotification()
+                            ->setType('alert')
+                            ->setMessage('advert_does_not_exist')
+                            ->setRedirectUrl(array('my', 'adverts'))
+                            ->run();
             }
         }
 
