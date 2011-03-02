@@ -7,11 +7,11 @@ class Module_Category_Controller_BackendMotion extends Module_Category_Controlle
 
         if (!$this->checkAccess())
         {
-            $redirect = new Base_Redirect($this->getDb());
-            $redirect->setMessage('forbidden_access');
-            $redirect->setType('alert');
-            $redirect->setRedirectUrl(array('admin', 'category'));
-            return $redirect->run();
+            return $this->createNotification()
+                        ->setMessage('forbidden_access')
+                        ->setType('alert')
+                        ->setRedirectUrl(array('admin', 'category'))
+                        ->run();
         }
 
         if ($result = $this->checkIdOnValid())
@@ -21,14 +21,14 @@ class Module_Category_Controller_BackendMotion extends Module_Category_Controlle
 
         if (!isset($this->getRequest()->getRequest()->id))
         {
-            $redirect = new Base_Redirect($this->getDb());
-            $redirect->setType('alert');
-            $redirect->setMessage('element_not_exists');
-            $redirect->setRedirectUrl(array('admin', 'category'));
-            return $redirect->run();
+            return $this->createNotification()
+                        ->setType('alert')
+                        ->setMessage('element_not_exists')
+                        ->setRedirectUrl(array('admin', 'category'))
+                        ->run();
         }
 
-        $redirect = new Base_Redirect($this->getDb());
+        $redirect = $this->createNotification();
 
         switch ($this->getRequest()->getRequest('tomotion'))
         {
@@ -50,7 +50,6 @@ class Module_Category_Controller_BackendMotion extends Module_Category_Controlle
                 break;
         }
 
-        $redirect->setRedirectUrl('/admin/category/');
-        return $redirect->run();
+        return $redirect->setRedirectUrl('/admin/category/')->run();
     }
 }

@@ -7,12 +7,12 @@ class Module_Module_Controller_EditController extends Module_Module_Controller_C
 
         if (!$this->checkAccess())
         {
-            $redirect = new Base_Redirect($this->getDb());
-            $redirect->setMessage('forbidden_access');
-            $redirect->setType('alert');
-            $redirect->setRedirectUrl(Base_Redirect::implode('admin', 'module', 'edit').
-                                      '?id='.$this->getRequest()->getRequest('id_module'));
-            return $redirect->run();
+            return $this->createNotification()
+                        ->setMessage('forbidden_access')
+                        ->setType('alert')
+                        ->setRedirectUrl(Base_Redirect::implode('admin', 'module', 'edit') .
+                                         '?id=' . $this->getRequest()->getRequest('id_module'))
+                        ->run();
         }
 
         if ($result = $this->checkIdOnValid())
@@ -50,12 +50,12 @@ class Module_Module_Controller_EditController extends Module_Module_Controller_C
         $validator->addModelErrors($this->controller->getValidateErrors())
                   ->validate();
 
-        $redirect = new Base_Redirect($this->getDb());
+        $redirect = $this->createNotification();
 
         if ($this->getView()->err = $validator->getErrors())
         {
-            $redirect->setType('alert');
-            $redirect->setMessage('post_errors');
+            $redirect->setType('alert')
+                     ->setMessage('post_errors');
             $this->getView()->setRedirect($redirect);
         }
         else

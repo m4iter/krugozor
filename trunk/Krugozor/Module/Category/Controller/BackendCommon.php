@@ -9,11 +9,11 @@ abstract class Module_Category_Controller_BackendCommon extends Module_Common_Co
         {
             if (!Base_Numeric::is_decimal($id))
             {
-                $redirect = new Base_Redirect($this->getDb());
-                $redirect->setType('alert');
-                $redirect->setMessage('bad_id_element');
-                $redirect->setRedirectUrl(array('admin', 'category'));
-                return $redirect->run();
+                return $this->createNotification()
+                            ->setType('alert')
+                            ->setMessage('bad_id_element')
+                            ->setRedirectUrl(array('admin', 'category'))
+                            ->run();
             }
 
             $this->category = $this->getMapper('Category/Category')->findById(
@@ -22,11 +22,11 @@ abstract class Module_Category_Controller_BackendCommon extends Module_Common_Co
 
             if (!$this->category->getId())
             {
-                $redirect = new Base_Redirect($this->getDb());
-                $redirect->setType('alert');
-                $redirect->setMessage('element_does_not_exist');
-                $redirect->setRedirectUrl(array('admin', 'category'));
-                return $redirect->run();
+                return $this->createNotification()
+                            ->setType('alert')
+                            ->setMessage('element_does_not_exist')
+                            ->setRedirectUrl(array('admin', 'category'))
+                            ->run();
             }
         }
     }

@@ -40,10 +40,10 @@ class Module_User_Controller_FrontendGetpassword extends Module_Common_Controlle
 
         if ($this->getView()->err = $validator->getErrors())
         {
-            $redirect = new Base_Redirect($this->getDb());
-            $redirect->setType('alert');
-            $redirect->setHeader('action_failed');
-            $redirect->setMessage('post_errors');
+            $redirect = $this->createNotification()
+                             ->setType('alert')
+                             ->setHeader('action_failed')
+                             ->setMessage('post_errors');
             $this->getView()->setRedirect($redirect);
         }
         else
@@ -57,9 +57,10 @@ class Module_User_Controller_FrontendGetpassword extends Module_Common_Controlle
 	            $user = $this->getMapper('User/User')->findByMail($user_mail);
 	        }
 
+            $redirect = $this->createNotification();
+
 	        if (!$user->getId())
 	        {
-	            $redirect = new Base_Redirect($this->getDb());
                 $redirect->setType('alert');
                 $redirect->setHeader('action_failed');
                 $redirect->setMessage('user_not_exist_message');
@@ -67,7 +68,6 @@ class Module_User_Controller_FrontendGetpassword extends Module_Common_Controlle
 	        }
 	        elseif (!$user->getMail()->getValue())
 	        {
-                $redirect = new Base_Redirect($this->getDb());
                 $redirect->setType('alert');
                 $redirect->setHeader('action_failed');
                 $redirect->setMessage('user_mail_not_exist_message');
@@ -78,7 +78,7 @@ class Module_User_Controller_FrontendGetpassword extends Module_Common_Controlle
                 $mail = new Base_Mail();
                 $mail->setFrom(Base_Registry::getInstance()->config['robot_email_adress']);
                 $mail->setReplyTo(Base_Registry::getInstance()->config['robot_email_adress']);
-                $mail->setHeader('¬осстановление забытого парол€ на сайте '.$_SERVER['HTTP_HOST']);
+                $mail->setHeader('¬осстановление забытого парол€ на сайте ' . $_SERVER['HTTP_HOST']);
                 $mail->setTemplate($this->getTemplateFilePath('FrontendGetpasswordSendTest'));
 
 	            try
@@ -86,7 +86,6 @@ class Module_User_Controller_FrontendGetpassword extends Module_Common_Controlle
 	                $service = new Module_User_Service_Getpassword();
 	                $service->setUser($user)->setMail($mail)->sendEmailWithHash();
 
-	                $redirect = new Base_Redirect($this->getDb());
                     $redirect->setMessage('test_send_ok_message');
                     $redirect->setRedirectUrl($this->getRequest()->getRequest()->getUri());
                     return $redirect->run();
@@ -97,7 +96,6 @@ class Module_User_Controller_FrontendGetpassword extends Module_Common_Controlle
 
 	                $this->getView()->err = $validator->getErrors();
 
-	                $redirect = new Base_Redirect($this->getDb());
 	                $redirect->setType('alert');
 	                $redirect->setHeader('action_failed');
 	                $redirect->setMessage('unknown_error');
@@ -110,4 +108,3 @@ class Module_User_Controller_FrontendGetpassword extends Module_Common_Controlle
         $this->getView()->user_mail = $this->getRequest()->getPost('user')->mail;
     }
 }
-?>

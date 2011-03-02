@@ -7,11 +7,11 @@ class Module_Category_Controller_BackendMain extends Module_Category_Controller_
 
         if (!$this->checkAccess())
         {
-            $redirect = new Base_Redirect($this->getDb());
-            $redirect->setMessage('forbidden_access');
-            $redirect->setType('alert');
-            $redirect->setRedirectUrl(array('admin'));
-            return $redirect->run();
+            return $this->createNotification()
+                        ->setMessage('forbidden_access')
+                        ->setType('alert')
+                        ->setRedirectUrl(array('admin'))
+                        ->run();
         }
 
         $this->init();
@@ -23,4 +23,3 @@ class Module_Category_Controller_BackendMain extends Module_Category_Controller_
         return $this->getView();
     }
 }
-?>

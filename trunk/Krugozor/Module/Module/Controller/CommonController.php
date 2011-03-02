@@ -13,12 +13,12 @@ abstract class Module_Module_Controller_CommonController extends Module_Common_C
 
             if (!$this->controller->getId())
             {
-                $redirect = new Base_Redirect($this->getDb());
-                $redirect->setType('alert');
-                $redirect->setMessage('element_does_not_exist');
-                $redirect->setRedirectUrl(Base_Redirect::implode('admin', 'module','edit')
-                                          .'?id='.$this->getRequest()->getRequest('id_module'));
-                return $redirect->run();
+                return $this->createNotification()
+                            ->setType('alert')
+                            ->setMessage('element_does_not_exist')
+                            ->setRedirectUrl(Base_Redirect::implode('admin', 'module', 'edit')
+                                             . '?id=' . $this->getRequest()->getRequest('id_module'))
+                            ->run();
             }
         }
     }

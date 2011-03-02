@@ -7,11 +7,11 @@ class Module_Module_Controller_EditModule extends Module_Module_Controller_Commo
 
         if (!$this->checkAccess())
         {
-            $redirect = new Base_Redirect($this->getDb());
-            $redirect->setMessage('forbidden_access');
-            $redirect->setType('alert');
-            $redirect->setRedirectUrl(array('admin', 'module'));
-            return $redirect->run();
+            return $this->createNotification()
+                        ->setMessage('forbidden_access')
+                        ->setType('alert')
+                        ->setRedirectUrl(array('admin', 'module'))
+                        ->run();
         }
 
         if ($result = $this->checkIdOnValid())
@@ -64,30 +64,27 @@ class Module_Module_Controller_EditModule extends Module_Module_Controller_Commo
 
         if ($this->getView()->err = $validator->getErrors())
         {
-            $redirect = new Base_Redirect($this->getDb());
-            $redirect->setType('alert');
-            $redirect->setMessage('post_errors');
+            $redirect = $this->createNotification()
+                             ->setType('alert')
+                             ->setMessage('post_errors');
             $this->getView()->setRedirect($redirect);
-
-            $this->getMapper('Module/Module')->loadControllers($this->module);
         }
         else
         {
             $this->getMapper('Module/Module')->save($this->module);
 
-            $redirect = new Base_Redirect($this->getDb());
-            $redirect->setMessage('element_edit_ok');
-            $redirect->setRedirectUrl($this->getRequest()->getRequest('return_on_page')
-                                      ? Base_Redirect::implode('admin', 'module', 'edit').
-                                      '?id='.$this->module->id
-                                      : (
-                                            $this->getRequest()->getRequest()->referer
-                                            ? $this->getRequest()->getRequest()->referer
-                                            : array('admin', 'module')
-                                        )
-                                     );
-            return $redirect->run();
+            return $this->createNotification()
+                        ->setMessage('element_edit_ok')
+                        ->setRedirectUrl($this->getRequest()->getRequest('return_on_page')
+                                          ? Base_Redirect::implode('admin', 'module', 'edit').
+                                          '?id='.$this->module->id
+                                          : (
+                                                $this->getRequest()->getRequest()->referer
+                                                ? $this->getRequest()->getRequest()->referer
+                                                : array('admin', 'module')
+                                            )
+                                         )
+                        ->run();
         }
     }
 }
-?>

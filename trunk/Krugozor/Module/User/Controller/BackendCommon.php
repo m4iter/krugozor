@@ -9,11 +9,11 @@ abstract class Module_User_Controller_BackendCommon extends Module_Common_Contro
         {
             if (!Base_Numeric::is_decimal($id))
             {
-                $redirect = new Base_Redirect($this->getDb());
-                $redirect->setType('alert');
-                $redirect->setMessage('bad_id_user');
-                $redirect->setRedirectUrl(array('admin', 'user'));
-                return $redirect->run();
+                return $this->createNotification()
+                            ->setType('alert')
+                            ->setMessage('bad_id_user')
+                            ->setRedirectUrl(array('admin', 'user'))
+                            ->run();
             }
 
             $this->user = $this->getMapper('User/User')->findById(
@@ -22,12 +22,12 @@ abstract class Module_User_Controller_BackendCommon extends Module_Common_Contro
 
             if (!$this->user->getId())
             {
-                $redirect = new Base_Redirect($this->getDb());
-                $redirect->setType('alert');
-                $redirect->setMessage('user_does_not_exist');
-                $redirect->addParam('id_user', $this->getRequest()->getRequest('id'));
-                $redirect->setRedirectUrl(array('admin', 'user'));
-                return $redirect->run();
+                return $this->createNotification()
+                            ->setType('alert')
+                            ->setMessage('user_does_not_exist')
+                            ->addParam('id_user', $this->getRequest()->getRequest('id'))
+                            ->setRedirectUrl(array('admin', 'user'))
+                            ->run();
             }
         }
     }

@@ -25,18 +25,18 @@ class Module_User_Controller_FrontendGetpasswordEnd extends Module_Common_Contro
 
                 $service->sendMailWithNewPassword();
 
-                $redirect = new Base_Redirect($this->getDb());
-                $redirect->setHeader('action_complete');
-                $redirect->setMessage('getpassword_send_message');
-                $redirect->setRedirectUrl('/my/');
-                return $redirect->run();
+                return $this->createNotification()
+                            ->setHeader('action_complete')
+                            ->setMessage('getpassword_send_message')
+                            ->setRedirectUrl('/my/')
+                            ->run();
             }
             else
             {
-                $redirect = new Base_Redirect($this->getDb());
-                $redirect->setType('warning');
-                $redirect->setHeader('bad_hash_header');
-                $redirect->setMessage('bad_hash_message');
+                $redirect = $this->createNotification()
+                                 ->setType('warning')
+                                 ->setHeader('bad_hash_header')
+                                 ->setMessage('bad_hash_message');
                 $this->getView()->setRedirect($redirect);
             }
         }

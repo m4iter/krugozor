@@ -7,18 +7,18 @@ class Module_Module_Controller_MainModule extends Module_Module_Controller_Commo
 
         if (!$this->checkAccess())
         {
-            $redirect = new Base_Redirect($this->getDb());
-            $redirect->setMessage('forbidden_access');
-            $redirect->setType('alert');
-            $redirect->setRedirectUrl(array('admin'));
-            return $redirect->run();
+            return $this->createNotification()
+                        ->setMessage('forbidden_access')
+                        ->setType('alert')
+                        ->setRedirectUrl(array('admin'))
+                        ->run();
         }
 
         $this->init();
 
         $navigation = new Module_Module_Service_Navigation($this->getRequest(),
-                                                          $this->getMapper('Module/Module'),
-                                                          new Base_Navigation(10, 100));
+                                                           $this->getMapper('Module/Module'),
+                                                           new Base_Navigation(10, 100));
         $this->getView()->modules = $navigation->getList();
         $this->getView()->navigation = $navigation->getNavigation();
 

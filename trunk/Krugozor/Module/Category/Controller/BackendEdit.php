@@ -7,11 +7,11 @@ class Module_Category_Controller_BackendEdit extends Module_Category_Controller_
 
         if (!$this->checkAccess())
         {
-            $redirect = new Base_Redirect($this->getDb());
-            $redirect->setMessage('forbidden_access');
-            $redirect->setType('alert');
-            $redirect->setRedirectUrl(array('admin', 'category'));
-            return $redirect->run();
+            return $this->createNotification()
+                        ->setMessage('forbidden_access')
+                        ->setType('alert')
+                        ->setRedirectUrl(array('admin', 'category'))
+                        ->run();
         }
 
         if ($result = $this->checkIdOnValid())
@@ -61,31 +61,31 @@ class Module_Category_Controller_BackendEdit extends Module_Category_Controller_
 
         if ($this->getView()->err = $validator->getErrors())
         {
-            $redirect = new Base_Redirect($this->getDb());
-            $redirect->setType('alert');
-            $redirect->setMessage('post_errors');
+            $redirect = $this->createNotification()
+                             ->setType('alert')
+                             ->setMessage('post_errors');
             $this->getView()->setRedirect($redirect);
         }
         else
         {
             $this->getMapper('Category/Category')->save($this->category);
 
-            $redirect = new Base_Redirect($this->getDb());
-            $redirect->setMessage('element_edit_ok');
-            $redirect->setRedirectUrl($this->getRequest()->getRequest('return_on_page')
-                                      ? Base_Redirect::implode('admin',
-                                                               'category',
-                                                               'edit',
-                                                               $this->category->getId()
-                                                              )
-                                      : (
-                                            $this->getRequest()->getRequest('referer')
-                                            ? $this->getRequest()->getRequest('referer')
-                                            : Base_Redirect::implode('admin', 'category')
-                                        )
-                                     );
+            return $this->createNotification()
+                        ->setMessage('element_edit_ok')
+                        ->setRedirectUrl($this->getRequest()->getRequest('return_on_page')
+	                                      ? Base_Redirect::implode('admin',
+	                                                               'category',
+	                                                               'edit',
+	                                                               $this->category->getId()
+	                                                              )
+	                                      : (
+	                                            $this->getRequest()->getRequest('referer')
+	                                            ? $this->getRequest()->getRequest('referer')
+	                                            : Base_Redirect::implode('admin', 'category')
+	                                        )
+	                                     )
 
-            return $redirect->run();
+                        ->run();
         }
     }
 }

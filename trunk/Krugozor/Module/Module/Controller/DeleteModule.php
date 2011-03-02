@@ -7,11 +7,11 @@ class Module_Module_Controller_DeleteModule extends Module_Module_Controller_Com
 
         if (!$this->checkAccess())
         {
-            $redirect = new Base_Redirect($this->getDb());
-            $redirect->setMessage('forbidden_access');
-            $redirect->setType('alert');
-            $redirect->setRedirectUrl(array('admin','module'));
-            return $redirect->run();
+            return $this->createNotification()
+                        ->setMessage('forbidden_access')
+                        ->setType('alert')
+                        ->setRedirectUrl(array('admin','module'))
+                        ->run();
         }
 
         if ($result = $this->checkIdOnValid())
@@ -21,19 +21,18 @@ class Module_Module_Controller_DeleteModule extends Module_Module_Controller_Com
 
         if (!isset($this->getRequest()->getRequest()->id))
         {
-            $redirect = new Base_Redirect($this->getDb());
-            $redirect->setType('alert');
-            $redirect->setMessage('id_element_not_exists');
-            $redirect->setRedirectUrl(array('admin', 'module'));
-            return $redirect->run();
+            return $this->createNotification()
+                        ->setType('alert')
+                        ->setMessage('id_element_not_exists')
+                        ->setRedirectUrl(array('admin', 'module'))
+                        ->run();
         }
 
         $this->getMapper('Module/Module')->delete($this->module);
 
-        $redirect = new Base_Redirect($this->getDb());
-        $redirect->setMessage('element_delete');
-        $redirect->setRedirectUrl($this->getRequest()->getRequest()->referer);
-        return $redirect->run();
+        return $this->createNotification()
+                    ->setMessage('element_delete')
+                    ->setRedirectUrl($this->getRequest()->getRequest()->referer)
+                    ->run();
     }
 }
-?>
